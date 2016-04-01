@@ -21,7 +21,7 @@ class Groups extends Component {
                         <tbody>
                             {group.players && group.players.map((player, playerIndex) =>
                                 <tr key={playerIndex}>
-                                    <td><input type="text" value={player.name} /></td>
+                                    <td>{player.name}</td>
                                     <td>{player.wins}</td>
                                     <td>{player.diff}</td>
                                 </tr>

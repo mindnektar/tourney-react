@@ -15,7 +15,9 @@ class Prep extends Component {
 
                 <EditOptions
                     changeGroupCount={this.props.changeGroupCount}
+                    changeWinsPerMatch={this.props.changeWinsPerMatch}
                     groupCount={this.props.groups.length}
+                    winsPerMatch={this.props.winsPerMatch}
                 />
 
                 <StartButton
@@ -30,9 +32,11 @@ Prep.propTypes = {
     addPlayer: PropTypes.func.isRequired,
     changeGroupCount: PropTypes.func.isRequired,
     changePlayerName: PropTypes.func.isRequired,
+    changeWinsPerMatch: PropTypes.func.isRequired,
     groups: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
     start: PropTypes.func.isRequired,
+    winsPerMatch: PropTypes.object.isRequired,
 };
 
 export default Prep;

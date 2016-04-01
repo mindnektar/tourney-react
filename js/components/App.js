@@ -14,9 +14,11 @@ class App extends Component {
                         addPlayer={this.props.addPlayer}
                         changeGroupCount={this.props.changeGroupCount}
                         changePlayerName={this.props.changePlayerName}
+                        changeWinsPerMatch={this.props.changeWinsPerMatch}
                         groups={this.props.data.groups}
                         players={this.props.data.players}
                         start={this.props.start}
+                        winsPerMatch={this.props.data.winsPerMatch}
                     />
                 }
 
@@ -25,6 +27,7 @@ class App extends Component {
                         groups={this.props.data.groups}
                         players={this.props.data.players}
                         preliminaries={this.props.data.preliminaries}
+                        winsPerMatch={this.props.data.winsPerMatch}
                     />
                 }
             </div>
@@ -50,6 +53,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     addPlayer: actions.addPlayer,
     changeGroupCount: actions.changeGroupCount,
     changePlayerName: actions.changePlayerName,
+    changeWinsPerMatch: actions.changeWinsPerMatch,
     start: actions.start,
 }, dispatch);
 

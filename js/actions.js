@@ -2,6 +2,7 @@ export const ADD_PLAYER = 'ADD_PLAYER';
 export const ASSIGN_GROUPS = 'ASSIGN_GROUPS';
 export const CHANGE_GROUP_COUNT = 'CHANGE_GROUP_COUNT';
 export const CHANGE_PLAYER_NAME = 'CHANGE_PLAYER_NAME';
+export const CHANGE_WINS_PER_MATCH = 'CHANGE_WINS_PER_MATCH';
 export const SET_PRELIMINARIES = 'SET_PRELIMINARIES';
 export const START = 'START';
 
@@ -65,6 +66,7 @@ const determinePreliminaries = groups => {
 export const addPlayer = () => ({ type: ADD_PLAYER });
 export const changeGroupCount = groupCount => ({ type: CHANGE_GROUP_COUNT, payload: { groupCount } });
 export const changePlayerName = (index, name) => ({ type: CHANGE_PLAYER_NAME, payload: { index, name } });
+export const changeWinsPerMatch = (type, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { type, wins } });
 
 export const start = () => (dispatch, getState) => {
     const { groups, players } = getState().data;

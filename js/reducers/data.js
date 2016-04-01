@@ -3,6 +3,7 @@ import {
     ASSIGN_GROUPS,
     CHANGE_GROUP_COUNT,
     CHANGE_PLAYER_NAME,
+    CHANGE_WINS_PER_MATCH,
     SET_PRELIMINARIES,
 } from '../actions';
 
@@ -10,6 +11,12 @@ const initialState = {
     players: [],
     groups: [{ players: [] }],
     preliminaries: [],
+    winsPerMatch: {
+        finals: 4,
+        preliminaries: 2,
+        quarterFinals: 2,
+        semiFinals: 3,
+    },
 };
 
 export default (state = initialState, action = {}) => {
@@ -48,6 +55,13 @@ export default (state = initialState, action = {}) => {
                     }),
                     ...state.players.slice(action.payload.index + 1),
                 ],
+            });
+
+        case CHANGE_WINS_PER_MATCH:
+            return Object.assign({}, state, {
+                winsPerMatch: Object.assign({}, state.winsPerMatch, {
+                    [action.payload.type]: action.payload.wins,
+                }),
             });
 
         case SET_PRELIMINARIES:
