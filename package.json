@@ -1,0 +1,45 @@
+{
+  "name": "tourney",
+  "version": "0.0.0",
+  "description": "",
+  "main": "js/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "app": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mindnektar/tourney-react"
+  },
+  "author": "Martin Denk",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/mindnektar/tourney-react/issues"
+  },
+  "homepage": "https://github.com/mindnektar/tourney-react",
+  "dependencies": {
+    "react": "0.14.3",
+    "react-dom": "0.14.3",
+    "react-redux": "4.0.0",
+    "redux": "3.0.4",
+    "redux-thunk": "~1.0.3",
+    "redux-logger": "~2.5.0",
+    "react-number-input": "~1.14.8"
+  },
+  "devDependencies": {
+    "babel-core": "5.8.22",
+    "babel-loader": "5.3.2",
+    "css-loader": "0.14.5",
+    "node-sass": "~3.4.2",
+    "react-hot-loader": "~1.3.0",
+    "resolve-url-loader": "^1.4.3",
+    "sass-loader": "^2.0.1",
+    "style-loader": "0.12.4",
+    "url-loader": "^0.5.7",
+    "webpack": "1.12.2",
+    "webpack-dev-server": "1.12.0",
+    "eslint": "~2.5.3",
+    "eslint-plugin-react": "~4.2.3",
+    "eslint-config-airbnb": "~6.2.0"
+  }
+}

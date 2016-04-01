@@ -1,0 +1,117 @@
+body
+    background: url("../img/bg.png") repeat
+    font-family: "Open Sans", sans-serif
+    margin: 0
+
+img
+    display: block
+    height: 50px
+    margin: 20px auto
+
+h1,
+h2
+    margin-top: 0
+    text-align: center
+
+.column
+    border-top: 1px dotted #777
+    box-sizing: border-box
+    float: left
+    padding: 20px
+    width: 33.33%
+
+input
+    background: none
+    border: none
+    color: white
+    cursor: pointer
+    font-size: 16px
+    outline: none
+    padding: 0
+    text-align: center
+    width: 100%
+
+table
+    background: rgba(0,0,0,.5)
+    border: 4px solid black
+    border-radius: 8px
+    border-spacing: 0
+    color: white
+    margin-bottom: 20px
+    text-align: center
+    width: 100%
+
+th,
+td
+    border: 1px solid black
+    border-left: none
+    border-top: none
+    padding: 4px
+
+tr:last-child td
+    border-bottom: none
+
+td:last-child,
+th:last-child
+    border-right: none
+
+th
+    background: rgba(0,0,0,.2)
+
+.vs
+    background: rgba(0,0,0,.2)
+    width: 20px
+
+.score
+    overflow: hidden
+    padding-left: 0
+    padding-right: 0
+    white-space: nowrap
+    width: 30px
+
+.score span
+    border-right: 1px solid #444
+    display: inline-block
+    width: 20px
+
+.score span:last-child
+    border: none
+
+.player
+    background: rgba(0,0,0,.5)
+    border: 1px solid black
+    border-left-width: 4px
+    border-top: none
+    border-right-width: 4px
+    color: white
+    padding: 4px
+
+    &:first-child
+        border-top: 4px solid black
+        border-top-left-radius: 8px
+        border-top-right-radius: 8px
+
+    &:last-child
+        border-bottom: 4px solid black
+        border-bottom-left-radius: 8px
+        border-bottom-right-radius: 8px
+
+    &.add
+        cursor: pointer
+        font-weight: bold
+        text-align: center
+
+.option-key
+    margin-bottom: 6px
+
+.option-value
+    input
+        background: white
+        border: 1px solid black
+        border-radius: 8px
+        box-sizing: border-box
+        color: black
+        display: inline-block
+        margin-left: 20%
+        padding: 4px
+        width: 80%
