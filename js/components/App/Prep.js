@@ -7,18 +7,20 @@ class Prep extends Component {
     render() {
         return (
             <div className="prep">
-                <EditPlayers
-                    addPlayer={this.props.addPlayer}
-                    changePlayerName={this.props.changePlayerName}
-                    players={this.props.players}
-                />
+                <div className="column-container">
+                    <EditPlayers
+                        addPlayer={this.props.addPlayer}
+                        changePlayerName={this.props.changePlayerName}
+                        players={this.props.players}
+                    />
 
-                <EditOptions
-                    changeGroupCount={this.props.changeGroupCount}
-                    changeWinsPerMatch={this.props.changeWinsPerMatch}
-                    groupCount={this.props.groups.length}
-                    winsPerMatch={this.props.winsPerMatch}
-                />
+                    <EditOptions
+                        changeGroupCount={this.props.changeGroupCount}
+                        changeWinsPerMatch={this.props.changeWinsPerMatch}
+                        groupCount={this.props.groups.length}
+                        winsPerMatch={this.props.winsPerMatch}
+                    />
+                </div>
 
                 <StartButton
                     start={this.props.start}

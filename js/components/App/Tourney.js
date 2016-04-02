@@ -5,7 +5,7 @@ import Preliminaries from './Tourney/Preliminaries';
 class Tourney extends Component {
     render() {
         return (
-            <div className="tourney">
+            <div className="column-container">
                 <Groups
                     groups={this.props.groups}
                     players={this.props.players}
