@@ -44,7 +44,10 @@ const determinePreliminaries = groups => {
         for (let j = 0; j < virtualPlayersPerGroup / 2; j++) {
             for (let k = 0; k < groups.length; k++) {
                 if (matcher[j] !== playersPerGroup && matcher[virtualPlayersPerGroup - 1 - j] !== playersPerGroup) {
-                    preliminaries.push([k, matcher[j], matcher[virtualPlayersPerGroup - 1 - j]]);
+                    preliminaries.push({
+                        group: k,
+                        players: [matcher[j], matcher[virtualPlayersPerGroup - 1 - j]],
+                    });
                 }
             }
         }

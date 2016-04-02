@@ -5,7 +5,8 @@
   "main": "js/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "app": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --hot"
+    "app": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --hot",
+    "app-win": "node node_modules\\webpack-dev-server\\bin\\webpack-dev-server.js --progress --colors --hot"
   },
   "repository": {
     "type": "git",
