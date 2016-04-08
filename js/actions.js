@@ -7,6 +7,7 @@ export const CHANGE_SCORE = 'CHANGE_SCORE';
 export const CHANGE_WINS_PER_MATCH = 'CHANGE_WINS_PER_MATCH';
 export const CHANGE_VIEW = 'CHANGE_VIEW';
 export const SET_PRELIMINARIES = 'SET_PRELIMINARIES';
+export const START_TOURNEY = 'START_TOURNEY';
 
 const assignPlayersRandomlyToGroups = (groups, players) => {
     if (!players.length) {
@@ -110,6 +111,7 @@ export const changeScore = (type, matchIndex, playerIndex, gameIndex, score) => 
         }
     }
 
+    dispatch({ type: START_TOURNEY });
     dispatch({ type: CHANGE_SCORE, payload: { type, matchIndex, playerIndex, gameIndex, score } });
 };
 

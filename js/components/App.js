@@ -11,6 +11,7 @@ class App extends Component {
             <div>
                 <Sidebar
                     changeView={this.props.changeView}
+                    tourneyStarted={this.props.ui.started}
                     view={this.props.ui.view}
                 />
 

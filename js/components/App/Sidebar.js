@@ -8,6 +8,7 @@ class Sidebar extends Component {
                 <ViewOption
                     active={this.props.view === 'options'}
                     changeView={this.props.changeView}
+                    disabled={this.props.tourneyStarted}
                     label="Options"
                     type="options"
                 />
@@ -32,6 +33,7 @@ class Sidebar extends Component {
 
 Sidebar.propTypes = {
     changeView: PropTypes.func.isRequired,
+    tourneyStarted: PropTypes.bool.isRequired,
     view: PropTypes.string.isRequired,
 };
 
