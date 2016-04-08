@@ -13,7 +13,6 @@ class Tourney extends Component {
 
                 <Preliminaries
                     groups={this.props.groups}
-                    winsPerMatch={this.props.winsPerMatch.preliminaries}
                     preliminaries={this.props.preliminaries}
                 />
             </div>
@@ -25,7 +24,6 @@ Tourney.propTypes = {
     groups: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
     preliminaries: PropTypes.array.isRequired,
-    winsPerMatch: PropTypes.object.isRequired,
 };
 
 export default Tourney;

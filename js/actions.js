@@ -34,7 +34,7 @@ const assignPlayersRandomlyToGroups = (groups, players) => {
     return groups;
 };
 
-const determinePreliminaries = groups => {
+const determinePreliminaries = (groups, winsPerMatch) => {
     const preliminaries = [];
     const playersPerGroup = groups[0].players.length;
     const virtualPlayersPerGroup = Math.ceil(playersPerGroup / 2) * 2;
@@ -46,7 +46,17 @@ const determinePreliminaries = groups => {
                 if (matcher[j] !== playersPerGroup && matcher[virtualPlayersPerGroup - 1 - j] !== playersPerGroup) {
                     preliminaries.push({
                         group: k,
-                        players: [matcher[j], matcher[virtualPlayersPerGroup - 1 - j]],
+                        players: [
+                            matcher[j],
+                            matcher[virtualPlayersPerGroup - 1 - j],
+                        ],
+                        scores: Array.from(
+                            new Array(2),
+                            () => Array.from(
+                                new Array(winsPerMatch * 2 - 1),
+                                () => 0
+                            )
+                        ),
                     });
                 }
             }
@@ -72,10 +82,17 @@ export const changePlayerName = (index, name) => ({ type: CHANGE_PLAYER_NAME, pa
 export const changeWinsPerMatch = (type, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { type, wins } });
 
 export const start = () => (dispatch, getState) => {
-    const { groups, players } = getState().data;
+    const { groups, players, winsPerMatch } = getState().data;
     const assignedGroups = assignPlayersRandomlyToGroups(groups, players);
 
     dispatch({ type: ASSIGN_GROUPS, payload: { groups: assignedGroups } });
-    dispatch({ type: SET_PRELIMINARIES, payload: { preliminaries: determinePreliminaries(assignedGroups) } });
+
+    dispatch({
+        type: SET_PRELIMINARIES,
+        payload: {
+            preliminaries: determinePreliminaries(assignedGroups, winsPerMatch.preliminaries),
+        },
+    });
+
     dispatch({ type: START });
 };

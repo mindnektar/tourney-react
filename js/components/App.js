@@ -27,7 +27,6 @@ class App extends Component {
                         groups={this.props.data.groups}
                         players={this.props.data.players}
                         preliminaries={this.props.data.preliminaries}
-                        winsPerMatch={this.props.data.winsPerMatch}
                     />
                 }
             </div>
@@ -39,6 +38,7 @@ App.propTypes = {
     addPlayer: PropTypes.func.isRequired,
     changeGroupCount: PropTypes.func.isRequired,
     changePlayerName: PropTypes.func.isRequired,
+    changeWinsPerMatch: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
     start: PropTypes.func.isRequired,
     ui: PropTypes.object.isRequired,

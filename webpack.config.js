@@ -1,3 +1,6 @@
+var path = require("path");
+var src = path.resolve("./");
+
 module.exports = {
     entry: [
         'webpack/hot/dev-server',
@@ -27,6 +30,9 @@ module.exports = {
     },
     devtool: "#inline-source-map",
     resolve: {
+        root: [
+            path.join(src, 'js')
+        ],
         extensions: [
             '',
             '.js'
