@@ -146,20 +146,11 @@ const determinePreliminaries = (groups, winsPerMatch) => {
         for (let j = 0; j < virtualPlayersPerGroup / 2; j++) {
             for (let k = 0; k < groups.length; k++) {
                 if (matcher[j] !== playersPerGroup && matcher[virtualPlayersPerGroup - 1 - j] !== playersPerGroup) {
-                    preliminaries.push({
-                        group: k,
-                        players: [
-                            matcher[j],
-                            matcher[virtualPlayersPerGroup - 1 - j],
-                        ],
-                        scores: Array.from(
-                            new Array(2),
-                            () => Array.from(
-                                new Array(winsPerMatch * 2 - 1),
-                                () => null
-                            )
-                        ),
-                    });
+                    preliminaries.push(Object.assign({ group: k }, createMatch(
+                        matcher[j],
+                        matcher[virtualPlayersPerGroup - 1 - j],
+                        winsPerMatch
+                    )));
                 }
             }
         }
