@@ -14,9 +14,12 @@ class Prep extends Component {
                     />
 
                     <EditOptions
+                        changeCutoff={this.props.changeCutoff}
                         changeGroupCount={this.props.changeGroupCount}
                         changeWinsPerMatch={this.props.changeWinsPerMatch}
+                        cutoff={this.props.cutoff}
                         groupCount={this.props.groups.length}
+                        playerCount={this.props.players.length}
                         winsPerMatch={this.props.winsPerMatch}
                     />
                 </div>
@@ -27,9 +30,11 @@ class Prep extends Component {
 
 Prep.propTypes = {
     addPlayer: PropTypes.func.isRequired,
+    changeCutoff: PropTypes.func.isRequired,
     changeGroupCount: PropTypes.func.isRequired,
     changePlayerName: PropTypes.func.isRequired,
     changeWinsPerMatch: PropTypes.func.isRequired,
+    cutoff: PropTypes.number.isRequired,
     groups: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
     winsPerMatch: PropTypes.object.isRequired,

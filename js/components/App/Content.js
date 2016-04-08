@@ -9,9 +9,11 @@ class Content extends Component {
                 {this.props.view === 'options' &&
                     <Prep
                         addPlayer={this.props.addPlayer}
+                        changeCutoff={this.props.changeCutoff}
                         changeGroupCount={this.props.changeGroupCount}
                         changePlayerName={this.props.changePlayerName}
                         changeWinsPerMatch={this.props.changeWinsPerMatch}
+                        cutoff={this.props.cutoff}
                         groups={this.props.groups}
                         players={this.props.players}
                         winsPerMatch={this.props.winsPerMatch}
@@ -32,9 +34,11 @@ class Content extends Component {
 
 Content.propTypes = {
     addPlayer: PropTypes.func.isRequired,
+    changeCutoff: PropTypes.func.isRequired,
     changeGroupCount: PropTypes.func.isRequired,
     changePlayerName: PropTypes.func.isRequired,
     changeWinsPerMatch: PropTypes.func.isRequired,
+    cutoff: PropTypes.number.isRequired,
     groups: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
     preliminaries: PropTypes.array.isRequired,

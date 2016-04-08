@@ -16,9 +16,11 @@ class App extends Component {
 
                 <Content
                     addPlayer={this.props.addPlayer}
+                    changeCutoff={this.props.changeCutoff}
                     changeGroupCount={this.props.changeGroupCount}
                     changePlayerName={this.props.changePlayerName}
                     changeWinsPerMatch={this.props.changeWinsPerMatch}
+                    cutoff={this.props.data.cutoff}
                     groups={this.props.data.groups}
                     players={this.props.data.players}
                     preliminaries={this.props.data.preliminaries}
@@ -32,6 +34,7 @@ class App extends Component {
 
 App.propTypes = {
     addPlayer: PropTypes.func.isRequired,
+    changeCutoff: PropTypes.func.isRequired,
     changeGroupCount: PropTypes.func.isRequired,
     changePlayerName: PropTypes.func.isRequired,
     changeView: PropTypes.func.isRequired,
@@ -47,6 +50,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     addPlayer: actions.addPlayer,
+    changeCutoff: actions.changeCutoff,
     changeGroupCount: actions.changeGroupCount,
     changePlayerName: actions.changePlayerName,
     changeView: actions.changeView,

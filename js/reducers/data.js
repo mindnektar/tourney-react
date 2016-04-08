@@ -1,6 +1,7 @@
 import {
     ADD_PLAYER,
     ASSIGN_GROUPS,
+    CHANGE_CUTOFF,
     CHANGE_GROUP_COUNT,
     CHANGE_PLAYER_NAME,
     CHANGE_WINS_PER_MATCH,
@@ -8,6 +9,7 @@ import {
 } from '../actions';
 
 const initialState = {
+    cutoff: 1,
     players: [],
     groups: [{ players: [] }],
     preliminaries: [],
@@ -36,6 +38,11 @@ export default (state = initialState, action = {}) => {
         case ASSIGN_GROUPS:
             return Object.assign({}, state, {
                 groups: action.payload.groups,
+            });
+
+        case CHANGE_CUTOFF:
+            return Object.assign({}, state, {
+                cutoff: parseInt(action.payload.cutoff, 10),
             });
 
         case CHANGE_GROUP_COUNT:

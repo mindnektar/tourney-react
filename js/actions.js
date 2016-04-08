@@ -1,5 +1,6 @@
 export const ADD_PLAYER = 'ADD_PLAYER';
 export const ASSIGN_GROUPS = 'ASSIGN_GROUPS';
+export const CHANGE_CUTOFF = 'CHANGE_CUTOFF';
 export const CHANGE_GROUP_COUNT = 'CHANGE_GROUP_COUNT';
 export const CHANGE_PLAYER_NAME = 'CHANGE_PLAYER_NAME';
 export const CHANGE_WINS_PER_MATCH = 'CHANGE_WINS_PER_MATCH';
@@ -83,9 +84,19 @@ const determinePreliminaries = (groups, winsPerMatch) => {
 };
 
 export const addPlayer = () => ({ type: ADD_PLAYER });
-export const changeGroupCount = groupCount => ({ type: CHANGE_GROUP_COUNT, payload: { groupCount } });
+export const changeCutoff = cutoff => ({ type: CHANGE_CUTOFF, payload: { cutoff } });
 export const changePlayerName = (index, name) => ({ type: CHANGE_PLAYER_NAME, payload: { index, name } });
 export const changeWinsPerMatch = (type, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { type, wins } });
+
+export const changeGroupCount = groupCount => (dispatch, getState) => {
+    const cutoff = Math.min(
+        Math.max(1, Math.ceil(groupCount / getState().data.players.length) - 1),
+        getState().data.cutoff
+    );
+
+    dispatch(changeCutoff(cutoff));
+    dispatch({ type: CHANGE_GROUP_COUNT, payload: { groupCount } });
+};
 
 export const changeView = view => (dispatch, getState) => {
     const currentView = getState().ui.view;
