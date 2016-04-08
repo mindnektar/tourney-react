@@ -1,13 +1,13 @@
 export const ADD_PLAYER = 'ADD_PLAYER';
+export const CALCULATE_ROUND_COUNT = 'CALCULATE_ROUND_COUNT';
 export const CHANGE_CUTOFF = 'CHANGE_CUTOFF';
 export const CHANGE_GROUP_COUNT = 'CHANGE_GROUP_COUNT';
 export const CHANGE_GROUPS = 'CHANGE_GROUPS';
 export const CHANGE_PLAYER_NAME = 'CHANGE_PLAYER_NAME';
-export const CHANGE_ROUND_COUNT = 'CHANGE_ROUND_COUNT';
 export const CHANGE_SCORE = 'CHANGE_SCORE';
 export const CHANGE_WINS_PER_MATCH = 'CHANGE_WINS_PER_MATCH';
 export const CHANGE_VIEW = 'CHANGE_VIEW';
-export const SET_PRELIMINARIES = 'SET_PRELIMINARIES';
+export const SET_MATCHES = 'SET_MATCHES';
 export const START_TOURNEY = 'START_TOURNEY';
 
 const assignPlayersRandomlyToGroups = (groups, players) => {
@@ -44,7 +44,7 @@ const assignPlayersRandomlyToGroups = (groups, players) => {
     return groups;
 };
 
-const calculateWinsAndDiffs = (groups, matches) => {
+const calculateGroupPositions = (groups, matches) => {
     groups.forEach(group => {
         group.players.forEach(player => {
             player.wins = 0;
@@ -83,6 +83,57 @@ const calculateWinsAndDiffs = (groups, matches) => {
     });
 
     return groups;
+};
+
+const createMatch = (player1, player2, winsPerMatch) => ({
+    players: [player1, player2],
+    scores: Array.from(
+        new Array(2),
+        () => Array.from(
+            new Array(winsPerMatch * 2 - 1),
+            () => null
+        )
+    ),
+});
+
+const determineKnockout = (groups, cutoff, winsPerMatch) => {
+    const roundCount = Math.ceil(Math.log2(cutoff * groups.length)) + 1;
+    const matchesPerGroup = Math.floor(cutoff / 2);
+    const matches = [];
+
+    for (let i = 0; i < roundCount - 1; i++) {
+        matches.push([]);
+
+        groups.forEach(group => {
+            for (let j = 0; j < matchesPerGroup; j++) {
+                matches[i].push(
+                    createMatch(
+                        group.players[j],
+                        group.players[cutoff - 1 - j],
+                        winsPerMatch[i]
+                    )
+                );
+            }
+        });
+
+        if (matchesPerGroup % 2 !== 0) {
+            const bye = Math.floor(Math.random() * groups.length);
+            const groupsWithoutBye = groups.slice(0);
+            groupsWithoutBye.splice(bye, 1);
+
+            for (let k = 0; k < groupsWithoutBye.length / 2; k += 2) {
+                matches[i].push(
+                    createMatch(
+                        groupsWithoutBye[k].players[matchesPerGroup],
+                        groupsWithoutBye[k + 1].players[matchesPerGroup],
+                        winsPerMatch[i]
+                    )
+                );
+            }
+        }
+    }
+
+    return matches;
 };
 
 const determinePreliminaries = (groups, winsPerMatch) => {
@@ -128,12 +179,13 @@ const determinePreliminaries = (groups, winsPerMatch) => {
 };
 
 export const addPlayer = () => ({ type: ADD_PLAYER });
+export const calculateRoundCount = () => ({ type: CALCULATE_ROUND_COUNT });
 export const changePlayerName = (index, name) => ({ type: CHANGE_PLAYER_NAME, payload: { index, name } });
 export const changeWinsPerMatch = (index, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { index, wins } });
 
-export const changeCutoff = cutoff => (dispatch, getState) => {
+export const changeCutoff = cutoff => dispatch => {
     dispatch({ type: CHANGE_CUTOFF, payload: { cutoff } });
-    dispatch(changeRoundCount(getState().data.groups.length, cutoff));
+    dispatch(calculateRoundCount());
 };
 
 export const changeGroupCount = groupCount => (dispatch, getState) => {
@@ -144,13 +196,7 @@ export const changeGroupCount = groupCount => (dispatch, getState) => {
 
     dispatch(changeCutoff(cutoff));
     dispatch({ type: CHANGE_GROUP_COUNT, payload: { groupCount } });
-    dispatch(changeRoundCount(groupCount, cutoff));
-};
-
-export const changeRoundCount = (groupCount, cutoff) => dispatch => {
-    const roundCount = Math.ceil(Math.log2(cutoff * groupCount)) + 1;
-
-    dispatch({ type: CHANGE_ROUND_COUNT, payload: { roundCount } });
+    dispatch(calculateRoundCount());
 };
 
 export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, score) => (dispatch, getState) => {
@@ -168,7 +214,7 @@ export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, scor
 
     dispatch({ type: START_TOURNEY });
     dispatch({ type: CHANGE_SCORE, payload: { roundIndex, matchIndex, playerIndex, gameIndex, score } });
-    dispatch({ type: CHANGE_GROUPS, payload: { groups: calculateWinsAndDiffs(groups.slice(0), getState().data.matches[roundIndex]) } });
+    dispatch({ type: CHANGE_GROUPS, payload: { groups: calculateGroupPositions(groups.slice(0), getState().data.matches[roundIndex]) } });
 };
 
 export const changeView = view => (dispatch, getState) => {
@@ -179,15 +225,18 @@ export const changeView = view => (dispatch, getState) => {
     }
 
     if (currentView === 'options') {
-        const { groups, players, winsPerMatch } = getState().data;
+        const { groups, players, winsPerMatch, cutoff } = getState().data;
         const assignedGroups = assignPlayersRandomlyToGroups(groups.slice(0), players.slice(0));
 
         dispatch({ type: CHANGE_GROUPS, payload: { groups: assignedGroups } });
 
         dispatch({
-            type: SET_PRELIMINARIES,
+            type: SET_MATCHES,
             payload: {
-                matches: determinePreliminaries(assignedGroups, winsPerMatch[0]),
+                matches: [
+                    determinePreliminaries(assignedGroups, winsPerMatch[0]),
+                    ...determineKnockout(assignedGroups, cutoff, winsPerMatch.slice(1)),
+                ],
             },
         });
     }

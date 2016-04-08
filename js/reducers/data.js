@@ -1,13 +1,13 @@
 import {
     ADD_PLAYER,
+    CALCULATE_ROUND_COUNT,
     CHANGE_CUTOFF,
     CHANGE_GROUP_COUNT,
     CHANGE_GROUPS,
     CHANGE_PLAYER_NAME,
-    CHANGE_ROUND_COUNT,
     CHANGE_SCORE,
     CHANGE_WINS_PER_MATCH,
-    SET_PRELIMINARIES,
+    SET_MATCHES,
 } from '../actions';
 
 const initialState = {
@@ -19,6 +19,8 @@ const initialState = {
 };
 
 export default (state = initialState, action = {}) => {
+    let roundCount;
+
     switch (action.type) {
         case ADD_PLAYER:
             return Object.assign({}, state, {
@@ -29,6 +31,19 @@ export default (state = initialState, action = {}) => {
                         name: '',
                         wins: 0,
                     },
+                ],
+            });
+
+        case CALCULATE_ROUND_COUNT:
+            roundCount = Math.ceil(Math.log2(state.cutoff * state.groups.length)) + 1;
+
+            return Object.assign({}, state, {
+                winsPerMatch: [
+                    ...state.winsPerMatch.slice(0, roundCount),
+                    ...Array.from(
+                        new Array(Math.max(0, roundCount - state.winsPerMatch.length)),
+                        () => 2
+                    ),
                 ],
             });
 
@@ -58,17 +73,6 @@ export default (state = initialState, action = {}) => {
                         name: action.payload.name,
                     }),
                     ...state.players.slice(action.payload.index + 1),
-                ],
-            });
-
-        case CHANGE_ROUND_COUNT:
-            return Object.assign({}, state, {
-                winsPerMatch: [
-                    ...state.winsPerMatch.slice(0, action.payload.roundCount),
-                    ...Array.from(
-                        new Array(Math.max(0, action.payload.roundCount - state.winsPerMatch.length)),
-                        () => 2
-                    ),
                 ],
             });
 
@@ -104,12 +108,9 @@ export default (state = initialState, action = {}) => {
                 ],
             });
 
-        case SET_PRELIMINARIES:
+        case SET_MATCHES:
             return Object.assign({}, state, {
-                matches: [
-                    action.payload.matches,
-                    ...state.matches.slice(1),
-                ],
+                matches: action.payload.matches,
             });
 
         default:
