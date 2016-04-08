@@ -1,6 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 
 class Groups extends Component {
+    sortPlayersByRanking(a, b) {
+        if (a.ranking < b.ranking) {
+            return 1;
+        }
+
+        if (a.ranking > b.ranking) {
+            return -1;
+        }
+
+        return 0;
+    }
+
     render() {
         return (
             <div className="column">
@@ -19,7 +31,7 @@ class Groups extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {group.players && group.players.map((player, playerIndex) =>
+                            {group.players && group.players.sort(this.sortPlayersByRanking).map((player, playerIndex) =>
                                 <tr key={playerIndex}>
                                     <td>{player.name}</td>
                                     <td>{player.wins}</td>

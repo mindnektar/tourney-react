@@ -82,6 +82,32 @@ const calculateGroupPositions = (groups, matches) => {
         }
     });
 
+    groups.forEach(group => {
+        group.players
+            .sort((a, b) => {
+                if (a.wins > b.wins) {
+                    return 1;
+                }
+
+                if (b.wins > a.wins) {
+                    return -1;
+                }
+
+                if (a.diff > b.diff) {
+                    return 1;
+                }
+
+                if (b.diff > a.diff) {
+                    return -1;
+                }
+
+                return 0;
+            })
+            .forEach((player, index) => {
+                player.ranking = index;
+            });
+    });
+
     return groups;
 };
 
