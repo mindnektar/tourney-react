@@ -4,6 +4,7 @@ import {
     CHANGE_GROUP_COUNT,
     CHANGE_GROUPS,
     CHANGE_PLAYER_NAME,
+    CHANGE_ROUND_COUNT,
     CHANGE_SCORE,
     CHANGE_WINS_PER_MATCH,
     SET_PRELIMINARIES,
@@ -60,6 +61,17 @@ export default (state = initialState, action = {}) => {
                 ],
             });
 
+        case CHANGE_ROUND_COUNT:
+            return Object.assign({}, state, {
+                winsPerMatch: [
+                    ...state.winsPerMatch.slice(0, action.payload.roundCount),
+                    ...Array.from(
+                        new Array(Math.max(0, action.payload.roundCount - state.winsPerMatch.length)),
+                        () => 2
+                    ),
+                ],
+            });
+
         case CHANGE_SCORE:
             return Object.assign({}, state, {
                 [action.payload.type]: [
@@ -83,7 +95,7 @@ export default (state = initialState, action = {}) => {
             return Object.assign({}, state, {
                 winsPerMatch: [
                     ...state.winsPerMatch.slice(0, action.payload.index),
-                    action.payload.wins,
+                    parseInt(action.payload.wins, 10),
                     ...state.winsPerMatch.slice(action.payload.index + 1),
                 ],
             });

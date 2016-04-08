@@ -40,7 +40,12 @@ class EditOptions extends Component {
 
                     {this.props.winsPerMatch.map((wins, index) =>
                         <div key={index}>
-                            <div className="option-key">{index === 0 ? 'Preliminaries' : `Knock-out round ${index + 1}:`}</div>
+                            <div className="option-key">
+                                {index === 0 && 'Preliminaries'}
+                                {index > 0 && index < this.props.winsPerMatch.length - 1 && `Knock-out round ${index}`}
+                                {index === this.props.winsPerMatch.length - 1 && index !== 0 && 'Final round'}
+                                :
+                            </div>
 
                             <div className="option-value">
                                 <NumberInput

@@ -3,6 +3,7 @@ export const CHANGE_CUTOFF = 'CHANGE_CUTOFF';
 export const CHANGE_GROUP_COUNT = 'CHANGE_GROUP_COUNT';
 export const CHANGE_GROUPS = 'CHANGE_GROUPS';
 export const CHANGE_PLAYER_NAME = 'CHANGE_PLAYER_NAME';
+export const CHANGE_ROUND_COUNT = 'CHANGE_ROUND_COUNT';
 export const CHANGE_SCORE = 'CHANGE_SCORE';
 export const CHANGE_WINS_PER_MATCH = 'CHANGE_WINS_PER_MATCH';
 export const CHANGE_VIEW = 'CHANGE_VIEW';
@@ -127,9 +128,13 @@ const determinePreliminaries = (groups, winsPerMatch) => {
 };
 
 export const addPlayer = () => ({ type: ADD_PLAYER });
-export const changeCutoff = cutoff => ({ type: CHANGE_CUTOFF, payload: { cutoff } });
 export const changePlayerName = (index, name) => ({ type: CHANGE_PLAYER_NAME, payload: { index, name } });
 export const changeWinsPerMatch = (index, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { index, wins } });
+
+export const changeCutoff = cutoff => (dispatch, getState) => {
+    dispatch({ type: CHANGE_CUTOFF, payload: { cutoff } });
+    dispatch(changeRoundCount(getState().data.groups.length, cutoff));
+};
 
 export const changeGroupCount = groupCount => (dispatch, getState) => {
     const cutoff = Math.min(
@@ -139,6 +144,13 @@ export const changeGroupCount = groupCount => (dispatch, getState) => {
 
     dispatch(changeCutoff(cutoff));
     dispatch({ type: CHANGE_GROUP_COUNT, payload: { groupCount } });
+    dispatch(changeRoundCount(groupCount, cutoff));
+};
+
+export const changeRoundCount = (groupCount, cutoff) => dispatch => {
+    const roundCount = Math.ceil(Math.log2(cutoff * groupCount)) + 1;
+
+    dispatch({ type: CHANGE_ROUND_COUNT, payload: { roundCount } });
 };
 
 export const changeScore = (type, matchIndex, playerIndex, gameIndex, score) => (dispatch, getState) => {
