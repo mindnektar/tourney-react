@@ -135,9 +135,10 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
 
         if (cutoff % 2 !== 0) {
             const remainingGroups = groups.slice(0);
+            let bye;
 
             if (groups.length % 2 !== 0) {
-                const bye = Math.floor(Math.random() * groups.length);
+                bye = Math.floor(Math.random() * groups.length);
                 remainingGroups.splice(bye, 1);
             }
 

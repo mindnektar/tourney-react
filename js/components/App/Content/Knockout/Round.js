@@ -7,7 +7,7 @@ class Round extends Component {
                 <h2>{this.props.label}</h2>
 
                 {this.props.matches.map((match, matchIndex) =>
-                    <table>
+                    <table key={matchIndex}>
                         <tbody>
                             {match.players.map((player, playerIndex) =>
                                 player &&
