@@ -1,16 +1,16 @@
 import {
-    START,
+    CHANGE_VIEW,
 } from '../actions';
 
 const initialState = {
-    prepping: true,
+    view: 'options',
 };
 
 export default (state = initialState, action = {}) => {
     switch (action.type) {
-        case START:
+        case CHANGE_VIEW:
             return Object.assign({}, state, {
-                prepping: false,
+                view: action.payload.view,
             });
 
         default:

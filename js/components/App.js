@@ -9,7 +9,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                {this.props.ui.prepping &&
+                {this.props.ui.view === 'options' &&
                     <Prep
                         addPlayer={this.props.addPlayer}
                         changeGroupCount={this.props.changeGroupCount}
@@ -22,7 +22,7 @@ class App extends Component {
                     />
                 }
 
-                {!this.props.ui.prepping &&
+                {this.props.ui.view === 'preliminaries' &&
                     <Tourney
                         groups={this.props.data.groups}
                         players={this.props.data.players}

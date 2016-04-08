@@ -3,8 +3,8 @@ export const ASSIGN_GROUPS = 'ASSIGN_GROUPS';
 export const CHANGE_GROUP_COUNT = 'CHANGE_GROUP_COUNT';
 export const CHANGE_PLAYER_NAME = 'CHANGE_PLAYER_NAME';
 export const CHANGE_WINS_PER_MATCH = 'CHANGE_WINS_PER_MATCH';
+export const CHANGE_VIEW = 'CHANGE_VIEW';
 export const SET_PRELIMINARIES = 'SET_PRELIMINARIES';
-export const START = 'START';
 
 const assignPlayersRandomlyToGroups = (groups, players) => {
     let groupIndex = 0;
@@ -79,6 +79,7 @@ const determinePreliminaries = (groups, winsPerMatch) => {
 export const addPlayer = () => ({ type: ADD_PLAYER });
 export const changeGroupCount = groupCount => ({ type: CHANGE_GROUP_COUNT, payload: { groupCount } });
 export const changePlayerName = (index, name) => ({ type: CHANGE_PLAYER_NAME, payload: { index, name } });
+export const changeView = view => ({ type: CHANGE_VIEW, payload: { view } });
 export const changeWinsPerMatch = (type, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { type, wins } });
 
 export const start = () => (dispatch, getState) => {
@@ -94,5 +95,5 @@ export const start = () => (dispatch, getState) => {
         },
     });
 
-    dispatch({ type: START });
+    dispatch(changeView('preliminaries'));
 };
