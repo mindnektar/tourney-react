@@ -24,8 +24,8 @@ class App extends Component {
                     changeWinsPerMatch={this.props.changeWinsPerMatch}
                     cutoff={this.props.data.cutoff}
                     groups={this.props.data.groups}
+                    matches={this.props.data.matches}
                     players={this.props.data.players}
-                    preliminaries={this.props.data.preliminaries}
                     view={this.props.ui.view}
                     winsPerMatch={this.props.data.winsPerMatch}
                 />

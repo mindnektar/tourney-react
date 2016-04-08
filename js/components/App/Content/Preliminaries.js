@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import Groups from './Tourney/Groups';
-import Preliminaries from './Tourney/Preliminaries';
+import Groups from './Preliminaries/Groups';
+import Matches from './Preliminaries/Matches';
 
 class Tourney extends Component {
     render() {
@@ -11,10 +11,10 @@ class Tourney extends Component {
                     players={this.props.players}
                 />
 
-                <Preliminaries
+                <Matches
                     changeScore={this.props.changeScore}
                     groups={this.props.groups}
-                    preliminaries={this.props.preliminaries}
+                    matches={this.props.matches}
                 />
             </div>
         );
@@ -25,7 +25,7 @@ Tourney.propTypes = {
     changeScore: PropTypes.func.isRequired,
     groups: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
-    preliminaries: PropTypes.array.isRequired,
+    matches: PropTypes.array.isRequired,
 };
 
 export default Tourney;

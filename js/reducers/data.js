@@ -14,7 +14,7 @@ const initialState = {
     cutoff: 1,
     players: [],
     groups: [{ players: [] }],
-    preliminaries: [],
+    matches: [],
     winsPerMatch: [2],
 };
 
@@ -74,20 +74,24 @@ export default (state = initialState, action = {}) => {
 
         case CHANGE_SCORE:
             return Object.assign({}, state, {
-                [action.payload.type]: [
-                    ...state[action.payload.type].slice(0, action.payload.matchIndex),
-                    Object.assign({}, state[action.payload.type][action.payload.matchIndex], {
-                        scores: [
-                            ...state[action.payload.type][action.payload.matchIndex].scores.slice(0, action.payload.playerIndex),
-                            [
-                                ...state[action.payload.type][action.payload.matchIndex].scores[action.payload.playerIndex].slice(0, action.payload.gameIndex),
-                                action.payload.score,
-                                ...state[action.payload.type][action.payload.matchIndex].scores[action.payload.playerIndex].slice(action.payload.gameIndex + 1),
+                matches: [
+                    ...state.matches.slice(0, action.payload.roundIndex),
+                    [
+                        ...state.matches[action.payload.roundIndex].slice(0, action.payload.matchIndex),
+                        Object.assign({}, state.matches[action.payload.roundIndex][action.payload.matchIndex], {
+                            scores: [
+                                ...state.matches[action.payload.roundIndex][action.payload.matchIndex].scores.slice(0, action.payload.playerIndex),
+                                [
+                                    ...state.matches[action.payload.roundIndex][action.payload.matchIndex].scores[action.payload.playerIndex].slice(0, action.payload.gameIndex),
+                                    action.payload.score,
+                                    ...state.matches[action.payload.roundIndex][action.payload.matchIndex].scores[action.payload.playerIndex].slice(action.payload.gameIndex + 1),
+                                ],
+                                ...state.matches[action.payload.roundIndex][action.payload.matchIndex].scores.slice(action.payload.playerIndex + 1),
                             ],
-                            ...state[action.payload.type][action.payload.matchIndex].scores.slice(action.payload.playerIndex + 1),
-                        ],
-                    }),
-                    ...state[action.payload.type].slice(action.payload.matchIndex + 1),
+                        }),
+                        ...state.matches[action.payload.roundIndex].slice(action.payload.matchIndex + 1),
+                    ],
+                    ...state.matches.slice(action.payload.roundIndex + 1),
                 ],
             });
 
@@ -102,7 +106,10 @@ export default (state = initialState, action = {}) => {
 
         case SET_PRELIMINARIES:
             return Object.assign({}, state, {
-                preliminaries: action.payload.preliminaries,
+                matches: [
+                    action.payload.matches,
+                    ...state.matches.slice(1),
+                ],
             });
 
         default:

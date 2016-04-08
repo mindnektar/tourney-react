@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import Knockout from './Content/Knockout';
+import Preliminaries from './Content/Preliminaries';
 import Prep from './Content/Prep';
-import Tourney from './Content/Tourney';
 
 class Content extends Component {
     render() {
@@ -21,11 +22,18 @@ class Content extends Component {
                 }
 
                 {this.props.view === 'preliminaries' &&
-                    <Tourney
+                    <Preliminaries
                         changeScore={this.props.changeScore}
                         groups={this.props.groups}
                         players={this.props.players}
-                        preliminaries={this.props.preliminaries}
+                        matches={this.props.matches[0]}
+                    />
+                }
+
+                {this.props.view === 'knockout' &&
+                    <Knockout
+                        changeScore={this.props.changeScore}
+                        matches={this.props.matches.slice(1)}
                     />
                 }
             </div>
@@ -42,8 +50,8 @@ Content.propTypes = {
     changeWinsPerMatch: PropTypes.func.isRequired,
     cutoff: PropTypes.number.isRequired,
     groups: PropTypes.array.isRequired,
+    matches: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
-    preliminaries: PropTypes.array.isRequired,
     view: PropTypes.string.isRequired,
     winsPerMatch: PropTypes.array.isRequired,
 };

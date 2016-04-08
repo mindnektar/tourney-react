@@ -153,7 +153,7 @@ export const changeRoundCount = (groupCount, cutoff) => dispatch => {
     dispatch({ type: CHANGE_ROUND_COUNT, payload: { roundCount } });
 };
 
-export const changeScore = (type, matchIndex, playerIndex, gameIndex, score) => (dispatch, getState) => {
+export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, score) => (dispatch, getState) => {
     const { groups } = getState().data;
 
     if (score === '') {
@@ -162,13 +162,13 @@ export const changeScore = (type, matchIndex, playerIndex, gameIndex, score) => 
         score = parseInt(score, 10);
 
         if (isNaN(score)) {
-            score = getState().data[type][matchIndex].scores[playerIndex][gameIndex] || 0;
+            score = getState().data.matches[roundIndex][matchIndex].scores[playerIndex][gameIndex] || 0;
         }
     }
 
     dispatch({ type: START_TOURNEY });
-    dispatch({ type: CHANGE_SCORE, payload: { type, matchIndex, playerIndex, gameIndex, score } });
-    dispatch({ type: CHANGE_GROUPS, payload: { groups: calculateWinsAndDiffs(groups.slice(0), getState().data[type]) } });
+    dispatch({ type: CHANGE_SCORE, payload: { roundIndex, matchIndex, playerIndex, gameIndex, score } });
+    dispatch({ type: CHANGE_GROUPS, payload: { groups: calculateWinsAndDiffs(groups.slice(0), getState().data.matches[roundIndex]) } });
 };
 
 export const changeView = view => (dispatch, getState) => {
@@ -187,7 +187,7 @@ export const changeView = view => (dispatch, getState) => {
         dispatch({
             type: SET_PRELIMINARIES,
             payload: {
-                preliminaries: determinePreliminaries(assignedGroups, winsPerMatch[0]),
+                matches: determinePreliminaries(assignedGroups, winsPerMatch[0]),
             },
         });
     }
