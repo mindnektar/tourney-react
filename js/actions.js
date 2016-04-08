@@ -137,16 +137,16 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
 };
 
 const determinePreliminaries = (groups, winsPerMatch) => {
-    const preliminaries = [];
     const playersPerGroup = groups[0].players.length;
     const virtualPlayersPerGroup = Math.ceil(playersPerGroup / 2) * 2;
     const matcher = Array.apply(null, { length: virtualPlayersPerGroup }).map(Number.call, Number);
+    const matches = [];
 
     for (let i = 0; i < virtualPlayersPerGroup - 1; i++) {
         for (let j = 0; j < virtualPlayersPerGroup / 2; j++) {
             for (let k = 0; k < groups.length; k++) {
                 if (matcher[j] !== playersPerGroup && matcher[virtualPlayersPerGroup - 1 - j] !== playersPerGroup) {
-                    preliminaries.push(Object.assign({ group: k }, createMatch(
+                    matches.push(Object.assign({ group: k }, createMatch(
                         matcher[j],
                         matcher[virtualPlayersPerGroup - 1 - j],
                         winsPerMatch
@@ -166,7 +166,7 @@ const determinePreliminaries = (groups, winsPerMatch) => {
         });
     }
 
-    return preliminaries;
+    return matches;
 };
 
 export const addPlayer = () => ({ type: ADD_PLAYER });
