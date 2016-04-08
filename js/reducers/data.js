@@ -1,8 +1,8 @@
 import {
     ADD_PLAYER,
-    ASSIGN_GROUPS,
     CHANGE_CUTOFF,
     CHANGE_GROUP_COUNT,
+    CHANGE_GROUPS,
     CHANGE_PLAYER_NAME,
     CHANGE_SCORE,
     CHANGE_WINS_PER_MATCH,
@@ -36,11 +36,6 @@ export default (state = initialState, action = {}) => {
                 ],
             });
 
-        case ASSIGN_GROUPS:
-            return Object.assign({}, state, {
-                groups: action.payload.groups,
-            });
-
         case CHANGE_CUTOFF:
             return Object.assign({}, state, {
                 cutoff: parseInt(action.payload.cutoff, 10),
@@ -52,6 +47,11 @@ export default (state = initialState, action = {}) => {
                     new Array(parseInt(action.payload.groupCount, 10)),
                     () => ({ players: [] })
                 ),
+            });
+
+        case CHANGE_GROUPS:
+            return Object.assign({}, state, {
+                groups: action.payload.groups,
             });
 
         case CHANGE_PLAYER_NAME:

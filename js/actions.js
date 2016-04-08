@@ -1,7 +1,7 @@
 export const ADD_PLAYER = 'ADD_PLAYER';
-export const ASSIGN_GROUPS = 'ASSIGN_GROUPS';
 export const CHANGE_CUTOFF = 'CHANGE_CUTOFF';
 export const CHANGE_GROUP_COUNT = 'CHANGE_GROUP_COUNT';
+export const CHANGE_GROUPS = 'CHANGE_GROUPS';
 export const CHANGE_PLAYER_NAME = 'CHANGE_PLAYER_NAME';
 export const CHANGE_SCORE = 'CHANGE_SCORE';
 export const CHANGE_WINS_PER_MATCH = 'CHANGE_WINS_PER_MATCH';
@@ -39,6 +39,45 @@ const assignPlayersRandomlyToGroups = (groups, players) => {
             wins: '-',
         });
     }
+
+    return groups;
+};
+
+const calculateWinsAndDiffs = (groups, matches) => {
+    matches.forEach(match => {
+        groups[match.group].players[0].wins = 0;
+        groups[match.group].players[1].wins = 0;
+        groups[match.group].players[0].diff = 0;
+        groups[match.group].players[1].diff = 0;
+
+        const gameWins = [0, 0];
+
+        match.scores[0].forEach((score, scoreIndex) => {
+            if (score !== null && match.scores[1][scoreIndex] !== null) {
+                const scoreDiff = score - match.scores[1][scoreIndex];
+
+                if (scoreDiff > 0) {
+                    gameWins[0]++;
+                    groups[match.group].players[match.players[0]].diff += Math.abs(scoreDiff);
+                    groups[match.group].players[match.players[1]].diff -= Math.abs(scoreDiff);
+                } else {
+                    gameWins[1]++;
+                    groups[match.group].players[match.players[1]].diff += Math.abs(scoreDiff);
+                    groups[match.group].players[match.players[0]].diff -= Math.abs(scoreDiff);
+                }
+            }
+        });
+
+        const minGameWinsToWinRound = Math.ceil(match.scores[0].length / 2);
+
+        if (gameWins[0] >= minGameWinsToWinRound || gameWins[1] >= minGameWinsToWinRound) {
+            if (gameWins[0] > gameWins[1]) {
+                groups[match.group].players[match.players[0]].wins++;
+            } else {
+                groups[match.group].players[match.players[1]].wins++;
+            }
+        }
+    });
 
     return groups;
 };
@@ -101,6 +140,8 @@ export const changeGroupCount = groupCount => (dispatch, getState) => {
 };
 
 export const changeScore = (type, matchIndex, playerIndex, gameIndex, score) => (dispatch, getState) => {
+    const { groups } = getState().data;
+
     if (score === '') {
         score = null;
     } else {
@@ -113,6 +154,7 @@ export const changeScore = (type, matchIndex, playerIndex, gameIndex, score) => 
 
     dispatch({ type: START_TOURNEY });
     dispatch({ type: CHANGE_SCORE, payload: { type, matchIndex, playerIndex, gameIndex, score } });
+    dispatch({ type: CHANGE_GROUPS, payload: { groups: calculateWinsAndDiffs(groups.slice(0), getState().data[type]) } });
 };
 
 export const changeView = view => (dispatch, getState) => {
@@ -126,7 +168,7 @@ export const changeView = view => (dispatch, getState) => {
         const { groups, players, winsPerMatch } = getState().data;
         const assignedGroups = assignPlayersRandomlyToGroups(groups.slice(0), players.slice(0));
 
-        dispatch({ type: ASSIGN_GROUPS, payload: { groups: assignedGroups } });
+        dispatch({ type: CHANGE_GROUPS, payload: { groups: assignedGroups } });
 
         dispatch({
             type: SET_PRELIMINARIES,
