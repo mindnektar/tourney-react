@@ -7,7 +7,13 @@ export const CHANGE_VIEW = 'CHANGE_VIEW';
 export const SET_PRELIMINARIES = 'SET_PRELIMINARIES';
 
 const assignPlayersRandomlyToGroups = (groups, players) => {
+    if (!players.length) {
+        return groups;
+    }
+
     let groupIndex = 0;
+
+    groups = groups.map(() => ({ players: [] }));
 
     while (true) {
         const playerIndex = Math.floor(Math.random() * players.length);
@@ -79,21 +85,28 @@ const determinePreliminaries = (groups, winsPerMatch) => {
 export const addPlayer = () => ({ type: ADD_PLAYER });
 export const changeGroupCount = groupCount => ({ type: CHANGE_GROUP_COUNT, payload: { groupCount } });
 export const changePlayerName = (index, name) => ({ type: CHANGE_PLAYER_NAME, payload: { index, name } });
-export const changeView = view => ({ type: CHANGE_VIEW, payload: { view } });
 export const changeWinsPerMatch = (type, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { type, wins } });
 
-export const start = () => (dispatch, getState) => {
-    const { groups, players, winsPerMatch } = getState().data;
-    const assignedGroups = assignPlayersRandomlyToGroups(groups, players);
+export const changeView = view => (dispatch, getState) => {
+    const currentView = getState().ui.view;
 
-    dispatch({ type: ASSIGN_GROUPS, payload: { groups: assignedGroups } });
+    if (currentView === view) {
+        return;
+    }
 
-    dispatch({
-        type: SET_PRELIMINARIES,
-        payload: {
-            preliminaries: determinePreliminaries(assignedGroups, winsPerMatch.preliminaries),
-        },
-    });
+    if (currentView === 'options') {
+        const { groups, players, winsPerMatch } = getState().data;
+        const assignedGroups = assignPlayersRandomlyToGroups(groups.slice(0), players.slice(0));
 
-    dispatch(changeView('preliminaries'));
+        dispatch({ type: ASSIGN_GROUPS, payload: { groups: assignedGroups } });
+
+        dispatch({
+            type: SET_PRELIMINARIES,
+            payload: {
+                preliminaries: determinePreliminaries(assignedGroups, winsPerMatch.preliminaries),
+            },
+        });
+    }
+
+    dispatch({ type: CHANGE_VIEW, payload: { view } });
 };

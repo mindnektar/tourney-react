@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import EditOptions from './Prep/EditOptions';
 import EditPlayers from './Prep/EditPlayers';
-import StartButton from './Prep/StartButton';
 
 class Prep extends Component {
     render() {
@@ -21,10 +20,6 @@ class Prep extends Component {
                         winsPerMatch={this.props.winsPerMatch}
                     />
                 </div>
-
-                <StartButton
-                    start={this.props.start}
-                />
             </div>
         );
     }
@@ -37,7 +32,6 @@ Prep.propTypes = {
     changeWinsPerMatch: PropTypes.func.isRequired,
     groups: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
-    start: PropTypes.func.isRequired,
     winsPerMatch: PropTypes.object.isRequired,
 };
 

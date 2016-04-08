@@ -1,7 +1,13 @@
+html
+    height: 100%
+    position: relative
+
 body
     background: url("../img/bg.png") repeat
     font-family: "Open Sans", sans-serif
+    height: 100%
     margin: 0
+    position: relative
 
 img
     display: block
@@ -13,6 +19,38 @@ h2
     margin-top: 0
     text-align: center
 
+.sidebar
+    box-sizing: border-box
+    display: flex
+    flex-direction: column
+    float: left
+    height: 100%
+    justify-content: center
+    padding: 10px
+    position: absolute
+    width: 100px
+
+.view-option
+    border: 2px solid black
+    border-radius: 8px
+    box-sizing: border-box
+    cursor: pointer
+    font-size: .7em
+    height: 80px
+    line-height: 76px
+    margin: 5px 0
+    text-align: center
+
+    &.active
+        background: rgba(0, 0, 0, .2)
+
+.content
+    float: left
+    height: 100%
+    left: 100px
+    position: absolute
+    right: 0
+
 .column-container
     display: flex
     flex-direction: row
@@ -21,8 +59,9 @@ h2
 .column
     border-top: 1px dotted #777
     box-sizing: border-box
+    flex-basis: 0
+    flex-grow: 1
     padding: 20px
-    width: 33.33%
 
 input
     background: none
