@@ -54,7 +54,7 @@ const determinePreliminaries = (groups, winsPerMatch) => {
                             new Array(2),
                             () => Array.from(
                                 new Array(winsPerMatch * 2 - 1),
-                                () => 0
+                                () => null
                             )
                         ),
                     });

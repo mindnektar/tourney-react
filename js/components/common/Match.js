@@ -9,13 +9,13 @@ class Match extends Component {
             <tr>
                 <td>{this.props.player1.name}</td>
 
-                {Array.from(new Array(rounds), key =>
+                {Array.from(new Array(rounds), (_, key) =>
                     <Score key={key} score={this.props.scores[0][key]} />
                 )}
 
                 <td className="vs">vs</td>
 
-                {Array.from(new Array(rounds), key =>
+                {Array.from(new Array(rounds), (_, key) =>
                     <Score key={key} score={this.props.scores[1][key]} />
                 )}
 
