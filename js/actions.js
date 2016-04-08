@@ -82,29 +82,20 @@ const calculateGroupPositions = (groups, matches) => {
         }
     });
 
-    groups.forEach(group => {
-        group.players
+    groups.forEach((group, groupIndex) => {
+        group.players.slice(0)
             .sort((a, b) => {
-                if (a.wins > b.wins) {
-                    return 1;
-                }
-
-                if (b.wins > a.wins) {
-                    return -1;
-                }
-
-                if (a.diff > b.diff) {
-                    return 1;
-                }
-
-                if (b.diff > a.diff) {
-                    return -1;
-                }
+                if (a.name === '---') return -1;
+                if (b.name === '---') return 1;
+                if (a.wins > b.wins) return 1;
+                if (b.wins > a.wins) return -1;
+                if (a.diff > b.diff) return 1;
+                if (b.diff > a.diff) return -1;
 
                 return 0;
             })
-            .forEach((player, index) => {
-                player.ranking = index;
+            .forEach((oldPlayer, playerIndex) => {
+                groups[groupIndex].players.find(player => player.name === oldPlayer.name).ranking = playerIndex;
             });
     });
 
@@ -134,8 +125,8 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
             for (let j = 0; j < matchesPerGroup; j++) {
                 matches[i].push(
                     createMatch(
-                        group.players[j],
-                        group.players[cutoff - 1 - j],
+                        group.players.find(player => player.ranking === j),
+                        group.players.find(player => player.ranking === cutoff - 1 - j),
                         winsPerMatch[i]
                     )
                 );
@@ -150,8 +141,8 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
             for (let k = 0; k < groupsWithoutBye.length / 2; k += 2) {
                 matches[i].push(
                     createMatch(
-                        groupsWithoutBye[k].players[matchesPerGroup],
-                        groupsWithoutBye[k + 1].players[matchesPerGroup],
+                        groupsWithoutBye[k].players.find(player => player.ranking === matchesPerGroup),
+                        groupsWithoutBye[k + 1].players.find(player => player.ranking === matchesPerGroup),
                         winsPerMatch[i]
                     )
                 );
@@ -197,6 +188,7 @@ const determinePreliminaries = (groups, winsPerMatch) => {
 
 export const addPlayer = () => ({ type: ADD_PLAYER });
 export const calculateRoundCount = () => ({ type: CALCULATE_ROUND_COUNT });
+export const changeGroups = groups => ({ type: CHANGE_GROUPS, payload: { groups } });
 export const changePlayerName = (index, name) => ({ type: CHANGE_PLAYER_NAME, payload: { index, name } });
 export const changeWinsPerMatch = (index, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { index, wins } });
 
@@ -231,7 +223,10 @@ export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, scor
 
     dispatch({ type: START_TOURNEY });
     dispatch({ type: CHANGE_SCORE, payload: { roundIndex, matchIndex, playerIndex, gameIndex, score } });
-    dispatch({ type: CHANGE_GROUPS, payload: { groups: calculateGroupPositions(groups.slice(0), getState().data.matches[roundIndex]) } });
+
+    if (roundIndex === 0) {
+        dispatch(changeGroups(calculateGroupPositions(groups.slice(0), getState().data.matches[0])));
+    }
 };
 
 export const changeView = view => (dispatch, getState) => {
@@ -256,6 +251,10 @@ export const changeView = view => (dispatch, getState) => {
                 ],
             },
         });
+
+        if (view === 'preliminaries') {
+            dispatch(changeGroups(calculateGroupPositions(assignedGroups.slice(0), getState().data.matches[0])));
+        }
     }
 
     dispatch({ type: CHANGE_VIEW, payload: { view } });

@@ -31,7 +31,7 @@ class Groups extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {group.players && group.players.sort(this.sortPlayersByRanking).map((player, playerIndex) =>
+                            {group.players && group.players.slice(0).sort(this.sortPlayersByRanking).map((player, playerIndex) =>
                                 <tr key={playerIndex}>
                                     <td>{player.name}</td>
                                     <td>{player.wins}</td>
