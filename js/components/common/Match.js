@@ -10,13 +10,21 @@ class Match extends Component {
                 <td>{this.props.player1.name}</td>
 
                 {Array.from(new Array(rounds), (_, key) =>
-                    <Score key={key} score={this.props.scores[0][key]} />
+                    <Score
+                        changeScore={score => this.props.changeScore(0, key, score)}
+                        key={key}
+                        score={this.props.scores[0][key]}
+                    />
                 )}
 
                 <td className="vs">vs</td>
 
                 {Array.from(new Array(rounds), (_, key) =>
-                    <Score key={key} score={this.props.scores[1][key]} />
+                    <Score
+                        changeScore={score => this.props.changeScore(1, key, score)}
+                        key={key}
+                        score={this.props.scores[1][key]}
+                    />
                 )}
 
                 <td>{this.props.player2.name}</td>
@@ -26,6 +34,7 @@ class Match extends Component {
 }
 
 Match.propTypes = {
+    changeScore: PropTypes.func.isRequired,
     player1: PropTypes.object.isRequired,
     player2: PropTypes.object.isRequired,
     scores: PropTypes.array.isRequired,

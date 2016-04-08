@@ -12,6 +12,7 @@ class Tourney extends Component {
                 />
 
                 <Preliminaries
+                    changeScore={this.props.changeScore}
                     groups={this.props.groups}
                     preliminaries={this.props.preliminaries}
                 />
@@ -21,6 +22,7 @@ class Tourney extends Component {
 }
 
 Tourney.propTypes = {
+    changeScore: PropTypes.func.isRequired,
     groups: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
     preliminaries: PropTypes.array.isRequired,

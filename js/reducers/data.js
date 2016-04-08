@@ -4,6 +4,7 @@ import {
     CHANGE_CUTOFF,
     CHANGE_GROUP_COUNT,
     CHANGE_PLAYER_NAME,
+    CHANGE_SCORE,
     CHANGE_WINS_PER_MATCH,
     SET_PRELIMINARIES,
 } from '../actions';
@@ -61,6 +62,25 @@ export default (state = initialState, action = {}) => {
                         name: action.payload.name,
                     }),
                     ...state.players.slice(action.payload.index + 1),
+                ],
+            });
+
+        case CHANGE_SCORE:
+            return Object.assign({}, state, {
+                [action.payload.type]: [
+                    ...state[action.payload.type].slice(0, action.payload.matchIndex),
+                    Object.assign({}, state[action.payload.type][action.payload.matchIndex], {
+                        scores: [
+                            ...state[action.payload.type][action.payload.matchIndex].scores.slice(0, action.payload.playerIndex),
+                            [
+                                ...state[action.payload.type][action.payload.matchIndex].scores[action.payload.playerIndex].slice(0, action.payload.gameIndex),
+                                action.payload.score,
+                                ...state[action.payload.type][action.payload.matchIndex].scores[action.payload.playerIndex].slice(action.payload.gameIndex + 1),
+                            ],
+                            ...state[action.payload.type][action.payload.matchIndex].scores.slice(action.payload.playerIndex + 1),
+                        ],
+                    }),
+                    ...state[action.payload.type].slice(action.payload.matchIndex + 1),
                 ],
             });
 

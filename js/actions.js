@@ -3,6 +3,7 @@ export const ASSIGN_GROUPS = 'ASSIGN_GROUPS';
 export const CHANGE_CUTOFF = 'CHANGE_CUTOFF';
 export const CHANGE_GROUP_COUNT = 'CHANGE_GROUP_COUNT';
 export const CHANGE_PLAYER_NAME = 'CHANGE_PLAYER_NAME';
+export const CHANGE_SCORE = 'CHANGE_SCORE';
 export const CHANGE_WINS_PER_MATCH = 'CHANGE_WINS_PER_MATCH';
 export const CHANGE_VIEW = 'CHANGE_VIEW';
 export const SET_PRELIMINARIES = 'SET_PRELIMINARIES';
@@ -96,6 +97,20 @@ export const changeGroupCount = groupCount => (dispatch, getState) => {
 
     dispatch(changeCutoff(cutoff));
     dispatch({ type: CHANGE_GROUP_COUNT, payload: { groupCount } });
+};
+
+export const changeScore = (type, matchIndex, playerIndex, gameIndex, score) => (dispatch, getState) => {
+    if (score === '') {
+        score = null;
+    } else {
+        score = parseInt(score, 10);
+
+        if (isNaN(score)) {
+            score = getState().data[type][matchIndex].scores[playerIndex][gameIndex] || 0;
+        }
+    }
+
+    dispatch({ type: CHANGE_SCORE, payload: { type, matchIndex, playerIndex, gameIndex, score } });
 };
 
 export const changeView = view => (dispatch, getState) => {

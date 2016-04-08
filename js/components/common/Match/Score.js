@@ -7,6 +7,7 @@ class Score extends Component {
                 <span>
                     <input
                         maxLength="2"
+                        onChange={event => this.props.changeScore(event.target.value)}
                         type="text"
                         value={this.props.score}
                     />
@@ -17,6 +18,7 @@ class Score extends Component {
 }
 
 Score.propTypes = {
+    changeScore: PropTypes.func.isRequired,
     score: PropTypes.number,
 };
 

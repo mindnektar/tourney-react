@@ -22,6 +22,7 @@ class Content extends Component {
 
                 {this.props.view === 'preliminaries' &&
                     <Tourney
+                        changeScore={this.props.changeScore}
                         groups={this.props.groups}
                         players={this.props.players}
                         preliminaries={this.props.preliminaries}
@@ -37,6 +38,7 @@ Content.propTypes = {
     changeCutoff: PropTypes.func.isRequired,
     changeGroupCount: PropTypes.func.isRequired,
     changePlayerName: PropTypes.func.isRequired,
+    changeScore: PropTypes.func.isRequired,
     changeWinsPerMatch: PropTypes.func.isRequired,
     cutoff: PropTypes.number.isRequired,
     groups: PropTypes.array.isRequired,
