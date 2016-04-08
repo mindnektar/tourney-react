@@ -44,12 +44,14 @@ const assignPlayersRandomlyToGroups = (groups, players) => {
 };
 
 const calculateWinsAndDiffs = (groups, matches) => {
-    matches.forEach(match => {
-        groups[match.group].players[0].wins = 0;
-        groups[match.group].players[1].wins = 0;
-        groups[match.group].players[0].diff = 0;
-        groups[match.group].players[1].diff = 0;
+    groups.forEach(group => {
+        group.players.forEach(player => {
+            player.wins = 0;
+            player.diff = 0;
+        });
+    });
 
+    matches.forEach(match => {
         const gameWins = [0, 0];
 
         match.scores[0].forEach((score, scoreIndex) => {
@@ -131,7 +133,7 @@ export const changeWinsPerMatch = (type, wins) => ({ type: CHANGE_WINS_PER_MATCH
 
 export const changeGroupCount = groupCount => (dispatch, getState) => {
     const cutoff = Math.min(
-        Math.max(1, Math.ceil(groupCount / getState().data.players.length) - 1),
+        Math.max(1, Math.ceil(getState().data.players.length / groupCount) - 1),
         getState().data.cutoff
     );
 
