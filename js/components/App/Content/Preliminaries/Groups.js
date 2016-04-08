@@ -3,11 +3,11 @@ import React, { Component, PropTypes } from 'react';
 class Groups extends Component {
     sortPlayersByRanking(a, b) {
         if (a.ranking < b.ranking) {
-            return 1;
+            return -1;
         }
 
         if (a.ranking > b.ranking) {
-            return -1;
+            return 1;
         }
 
         return 0;

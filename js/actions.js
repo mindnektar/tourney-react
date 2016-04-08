@@ -85,12 +85,12 @@ const calculateGroupPositions = (groups, matches) => {
     groups.forEach((group, groupIndex) => {
         group.players.slice(0)
             .sort((a, b) => {
-                if (a.name === '---') return -1;
-                if (b.name === '---') return 1;
-                if (a.wins > b.wins) return 1;
-                if (b.wins > a.wins) return -1;
-                if (a.diff > b.diff) return 1;
-                if (b.diff > a.diff) return -1;
+                if (a.name === '---') return 1;
+                if (b.name === '---') return -1;
+                if (a.wins > b.wins) return -1;
+                if (b.wins > a.wins) return 1;
+                if (a.diff > b.diff) return -1;
+                if (b.diff > a.diff) return 1;
 
                 return 0;
             })
@@ -133,19 +133,26 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
             }
         });
 
-        if (matchesPerGroup % 2 !== 0) {
-            const bye = Math.floor(Math.random() * groups.length);
-            const groupsWithoutBye = groups.slice(0);
-            groupsWithoutBye.splice(bye, 1);
+        if (cutoff % 2 !== 0) {
+            const remainingGroups = groups.slice(0);
 
-            for (let k = 0; k < groupsWithoutBye.length / 2; k += 2) {
+            if (groups.length % 2 !== 0) {
+                const bye = Math.floor(Math.random() * groups.length);
+                remainingGroups.splice(bye, 1);
+            }
+
+            for (let k = 0; k < remainingGroups.length / 2; k += 2) {
                 matches[i].push(
                     createMatch(
-                        groupsWithoutBye[k].players.find(player => player.ranking === matchesPerGroup),
-                        groupsWithoutBye[k + 1].players.find(player => player.ranking === matchesPerGroup),
+                        remainingGroups[k].players.find(player => player.ranking === matchesPerGroup),
+                        remainingGroups[k + 1].players.find(player => player.ranking === matchesPerGroup),
                         winsPerMatch[i]
                     )
                 );
+            }
+
+            if (bye) {
+                matches[i].push({ bye });
             }
         }
     }
@@ -225,6 +232,7 @@ export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, scor
     dispatch({ type: CHANGE_SCORE, payload: { roundIndex, matchIndex, playerIndex, gameIndex, score } });
 
     if (roundIndex === 0) {
+        dispatch(setMatches(getState().data.matches[0]));
         dispatch(changeGroups(calculateGroupPositions(groups.slice(0), getState().data.matches[0])));
     }
 };
@@ -237,20 +245,11 @@ export const changeView = view => (dispatch, getState) => {
     }
 
     if (currentView === 'options') {
-        const { groups, players, winsPerMatch, cutoff } = getState().data;
+        const { groups, players } = getState().data;
         const assignedGroups = assignPlayersRandomlyToGroups(groups.slice(0), players.slice(0));
 
-        dispatch({ type: CHANGE_GROUPS, payload: { groups: assignedGroups } });
-
-        dispatch({
-            type: SET_MATCHES,
-            payload: {
-                matches: [
-                    determinePreliminaries(assignedGroups, winsPerMatch[0]),
-                    ...determineKnockout(assignedGroups, cutoff, winsPerMatch.slice(1)),
-                ],
-            },
-        });
+        dispatch(changeGroups(assignedGroups));
+        dispatch(setMatches());
 
         if (view === 'preliminaries') {
             dispatch(changeGroups(calculateGroupPositions(assignedGroups.slice(0), getState().data.matches[0])));
@@ -258,4 +257,18 @@ export const changeView = view => (dispatch, getState) => {
     }
 
     dispatch({ type: CHANGE_VIEW, payload: { view } });
+};
+
+export const setMatches = preliminaries => (dispatch, getState) => {
+    const { groups, winsPerMatch, cutoff } = getState().data;
+
+    dispatch({
+        type: SET_MATCHES,
+        payload: {
+            matches: [
+                preliminaries || determinePreliminaries(groups, winsPerMatch[0]),
+                ...determineKnockout(groups, cutoff, winsPerMatch.slice(1)),
+            ],
+        },
+    });
 };
