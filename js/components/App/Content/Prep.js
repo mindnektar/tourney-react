@@ -37,7 +37,7 @@ Prep.propTypes = {
     cutoff: PropTypes.number.isRequired,
     groups: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
-    winsPerMatch: PropTypes.object.isRequired,
+    winsPerMatch: PropTypes.array.isRequired,
 };
 
 export default Prep;

@@ -45,7 +45,7 @@ Content.propTypes = {
     players: PropTypes.array.isRequired,
     preliminaries: PropTypes.array.isRequired,
     view: PropTypes.string.isRequired,
-    winsPerMatch: PropTypes.object.isRequired,
+    winsPerMatch: PropTypes.array.isRequired,
 };
 
 export default Content;

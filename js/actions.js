@@ -129,7 +129,7 @@ const determinePreliminaries = (groups, winsPerMatch) => {
 export const addPlayer = () => ({ type: ADD_PLAYER });
 export const changeCutoff = cutoff => ({ type: CHANGE_CUTOFF, payload: { cutoff } });
 export const changePlayerName = (index, name) => ({ type: CHANGE_PLAYER_NAME, payload: { index, name } });
-export const changeWinsPerMatch = (type, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { type, wins } });
+export const changeWinsPerMatch = (index, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { index, wins } });
 
 export const changeGroupCount = groupCount => (dispatch, getState) => {
     const cutoff = Math.min(
@@ -175,7 +175,7 @@ export const changeView = view => (dispatch, getState) => {
         dispatch({
             type: SET_PRELIMINARIES,
             payload: {
-                preliminaries: determinePreliminaries(assignedGroups, winsPerMatch.preliminaries),
+                preliminaries: determinePreliminaries(assignedGroups, winsPerMatch[0]),
             },
         });
     }

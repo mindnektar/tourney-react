@@ -14,12 +14,7 @@ const initialState = {
     players: [],
     groups: [{ players: [] }],
     preliminaries: [],
-    winsPerMatch: {
-        finals: 4,
-        preliminaries: 2,
-        quarterFinals: 2,
-        semiFinals: 3,
-    },
+    winsPerMatch: [2],
 };
 
 export default (state = initialState, action = {}) => {
@@ -86,9 +81,11 @@ export default (state = initialState, action = {}) => {
 
         case CHANGE_WINS_PER_MATCH:
             return Object.assign({}, state, {
-                winsPerMatch: Object.assign({}, state.winsPerMatch, {
-                    [action.payload.type]: action.payload.wins,
-                }),
+                winsPerMatch: [
+                    ...state.winsPerMatch.slice(0, action.payload.index),
+                    action.payload.wins,
+                    ...state.winsPerMatch.slice(action.payload.index + 1),
+                ],
             });
 
         case SET_PRELIMINARIES:
