@@ -5,9 +5,12 @@ class Knockout extends Component {
     render() {
         return (
             <div className="column-container">
-                {this.matches && this.matches.map((match, matchIndex) =>
+                {this.props.rounds && this.props.rounds.map((round, roundIndex) =>
                     <Round
-                        changeScore={(playerIndex, gameIndex, score) => this.props.changeScore('knockout', matchIndex, playerIndex, gameIndex, score)}
+                        changeScore={(matchIndex, playerIndex, gameIndex, score) => this.props.changeScore(roundIndex, matchIndex, playerIndex, gameIndex, score)}
+                        key={roundIndex}
+                        label={roundIndex === this.props.rounds.length - 1 ? 'Final round' : `Knock-out round ${roundIndex + 1}`}
+                        matches={round}
                     />
                 )}
             </div>
@@ -17,7 +20,7 @@ class Knockout extends Component {
 
 Knockout.propTypes = {
     changeScore: PropTypes.func.isRequired,
-    matches: PropTypes.array.isRequired,
+    rounds: PropTypes.array.isRequired,
 };
 
 export default Knockout;

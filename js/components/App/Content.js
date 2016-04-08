@@ -33,7 +33,7 @@ class Content extends Component {
                 {this.props.view === 'knockout' &&
                     <Knockout
                         changeScore={this.props.changeScore}
-                        matches={this.props.matches.slice(1)}
+                        rounds={this.props.matches.slice(1)}
                     />
                 }
             </div>
