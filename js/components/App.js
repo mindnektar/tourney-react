@@ -12,6 +12,7 @@ class App extends Component {
                 <Sidebar
                     changeView={this.props.changeView}
                     playerCount={this.props.data.players.length}
+                    saveData={this.props.saveData}
                     tourneyStarted={this.props.ui.started}
                     view={this.props.ui.view}
                 />
@@ -46,6 +47,7 @@ App.propTypes = {
     changeWinsPerMatch: PropTypes.func.isRequired,
     deletePlayer: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
+    saveData: PropTypes.func.isRequired,
     ui: PropTypes.object.isRequired,
 };
 
@@ -63,6 +65,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     changeView: actions.changeView,
     changeWinsPerMatch: actions.changeWinsPerMatch,
     deletePlayer: actions.deletePlayer,
+    saveData: actions.saveData,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

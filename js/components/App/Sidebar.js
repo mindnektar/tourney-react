@@ -7,26 +7,28 @@ class Sidebar extends Component {
             <div className="sidebar">
                 <ViewOption
                     active={this.props.view === 'options'}
-                    changeView={this.props.changeView}
+                    onClick={() => this.props.changeView('options')}
                     disabled={this.props.tourneyStarted}
                     label="Options"
-                    type="options"
                 />
 
                 <ViewOption
                     active={this.props.view === 'preliminaries'}
-                    changeView={this.props.changeView}
+                    onClick={() => this.props.changeView('preliminaries')}
                     disabled={this.props.playerCount < 2}
                     label="Preliminaries"
-                    type="preliminaries"
                 />
 
                 <ViewOption
                     active={this.props.view === 'knockout'}
-                    changeView={this.props.changeView}
+                    onClick={() => this.props.changeView('knockout')}
                     disabled={this.props.playerCount < 2}
                     label="Knock-out"
-                    type="knockout"
+                />
+
+                <ViewOption
+                    onClick={this.props.saveData}
+                    label="Save"
                 />
             </div>
         );
@@ -36,6 +38,7 @@ class Sidebar extends Component {
 Sidebar.propTypes = {
     changeView: PropTypes.func.isRequired,
     playerCount: PropTypes.number.isRequired,
+    saveData: PropTypes.func.isRequired,
     tourneyStarted: PropTypes.bool.isRequired,
     view: PropTypes.string.isRequired,
 };

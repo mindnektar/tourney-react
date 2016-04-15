@@ -1,3 +1,5 @@
+import CryptoJS from 'crypto-js';
+
 export const ADD_PLAYER = 'ADD_PLAYER';
 export const CALCULATE_ROUND_COUNT = 'CALCULATE_ROUND_COUNT';
 export const CHANGE_CUTOFF = 'CHANGE_CUTOFF';
@@ -8,8 +10,10 @@ export const CHANGE_SCORE = 'CHANGE_SCORE';
 export const CHANGE_WINS_PER_MATCH = 'CHANGE_WINS_PER_MATCH';
 export const CHANGE_VIEW = 'CHANGE_VIEW';
 export const DELETE_PLAYER = 'DELETE_PLAYER';
+export const SAVE_DATA = 'SAVE_DATA';
+export const SET_DATA = 'SET_DATA';
 export const SET_MATCHES = 'SET_MATCHES';
-export const START_TOURNEY = 'START_TOURNEY';
+export const SET_UI = 'SET_UI';
 
 const assignPlayersRandomlyToGroups = (groups, players) => {
     if (!players.length) {
@@ -245,7 +249,9 @@ export const changeGroups = groups => ({ type: CHANGE_GROUPS, payload: { groups 
 export const changePlayerName = (index, name) => ({ type: CHANGE_PLAYER_NAME, payload: { index, name } });
 export const changeWinsPerMatch = (index, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { index, wins } });
 export const deletePlayer = index => ({ type: DELETE_PLAYER, payload: { index } });
+export const setData = data => ({ type: SET_DATA, payload: { data } });
 export const setMatches = (roundIndex, matches) => ({ type: SET_MATCHES, payload: { roundIndex, matches } });
+export const setUi = ui => ({ type: SET_UI, payload: { ui } });
 
 export const changeCutoff = cutoff => dispatch => {
     dispatch({ type: CHANGE_CUTOFF, payload: { cutoff } });
@@ -312,4 +318,15 @@ export const changeView = view => (dispatch, getState) => {
     }
 
     dispatch({ type: CHANGE_VIEW, payload: { view } });
+};
+
+export const saveData = () => (dispatch, getState) => {
+    const encryptedState = encodeURIComponent(
+        CryptoJS.AES.encrypt(
+            JSON.stringify(getState()),
+            'lala'
+        )
+    );
+
+    window.history.pushState({}, '', `#${encryptedState.toString()}`);
 };

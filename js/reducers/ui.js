@@ -1,5 +1,6 @@
 import {
     CHANGE_VIEW,
+    SET_UI,
     START_TOURNEY,
 } from '../actions';
 
@@ -14,6 +15,9 @@ export default (state = initialState, action = {}) => {
             return Object.assign({}, state, {
                 view: action.payload.view,
             });
+
+        case SET_UI:
+            return action.payload.ui;
 
         case START_TOURNEY:
             return Object.assign({}, state, {

@@ -9,6 +9,7 @@ import {
     CHANGE_WINS_PER_MATCH,
     DELETE_PLAYER,
     SET_MATCHES,
+    SET_DATA,
 } from '../actions';
 
 const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
 
 export default (state = initialState, action = {}) => {
     let roundCount;
+    let matches;
 
     switch (action.type) {
         case ADD_PLAYER:
@@ -118,8 +120,6 @@ export default (state = initialState, action = {}) => {
             });
 
         case SET_MATCHES:
-            let matches;
-
             if (action.payload.roundIndex === null) {
                 matches = action.payload.matches;
             } else {
@@ -131,6 +131,9 @@ export default (state = initialState, action = {}) => {
             }
 
             return Object.assign({}, state, { matches });
+
+        case SET_DATA:
+            return action.payload.data;
 
         default:
             return state;
