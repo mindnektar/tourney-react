@@ -15,6 +15,7 @@ class PlayerInput extends Component {
     render() {
         return (
             <input
+                maxLength="80"
                 onChange={event => this.props.changePlayerName(this.props.index, event.target.value)}
                 onKeyDown={event => this.keyDown(event)}
                 ref="input"
