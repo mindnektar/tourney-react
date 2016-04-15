@@ -26,8 +26,8 @@ class Groups extends Component {
                         <thead>
                             <tr>
                                 <th>Player</th>
-                                <th>Wins</th>
-                                <th>Score difference</th>
+                                <th className="wins">Wins</th>
+                                <th className="score-diff">Score ∆</th>
                             </tr>
                         </thead>
                         <tbody>
