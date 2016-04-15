@@ -150,6 +150,7 @@ th
     border-right-width: 4px
     color: white
     padding: 4px
+    position: relative
 
     &:first-child
         border-top: 4px solid black
@@ -165,6 +166,21 @@ th
         cursor: pointer
         font-weight: bold
         text-align: center
+
+    &:hover
+        .player-delete
+            display: block
+
+.player-delete
+    color: white
+    cursor: pointer
+    display: none
+    line-height: 24px
+    position: absolute
+    right: 0
+    text-align: center
+    top: 0
+    width: 20px
 
 .option-key
     margin-bottom: 6px

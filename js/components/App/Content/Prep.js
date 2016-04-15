@@ -10,6 +10,7 @@ class Prep extends Component {
                     <EditPlayers
                         addPlayer={this.props.addPlayer}
                         changePlayerName={this.props.changePlayerName}
+                        deletePlayer={this.props.deletePlayer}
                         players={this.props.players}
                     />
 
@@ -35,6 +36,7 @@ Prep.propTypes = {
     changePlayerName: PropTypes.func.isRequired,
     changeWinsPerMatch: PropTypes.func.isRequired,
     cutoff: PropTypes.number.isRequired,
+    deletePlayer: PropTypes.func.isRequired,
     groups: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
     winsPerMatch: PropTypes.array.isRequired,

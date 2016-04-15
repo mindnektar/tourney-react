@@ -7,6 +7,7 @@ import {
     CHANGE_PLAYER_NAME,
     CHANGE_SCORE,
     CHANGE_WINS_PER_MATCH,
+    DELETE_PLAYER,
     SET_MATCHES,
 } from '../actions';
 
@@ -105,6 +106,14 @@ export default (state = initialState, action = {}) => {
                     ...state.winsPerMatch.slice(0, action.payload.index),
                     parseInt(action.payload.wins, 10),
                     ...state.winsPerMatch.slice(action.payload.index + 1),
+                ],
+            });
+
+        case DELETE_PLAYER:
+            return Object.assign({}, state, {
+                players: [
+                    ...state.players.slice(0, action.payload.index),
+                    ...state.players.slice(action.payload.index + 1),
                 ],
             });
 

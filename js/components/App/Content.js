@@ -15,6 +15,7 @@ class Content extends Component {
                         changePlayerName={this.props.changePlayerName}
                         changeWinsPerMatch={this.props.changeWinsPerMatch}
                         cutoff={this.props.cutoff}
+                        deletePlayer={this.props.deletePlayer}
                         groups={this.props.groups}
                         players={this.props.players}
                         winsPerMatch={this.props.winsPerMatch}
@@ -49,6 +50,7 @@ Content.propTypes = {
     changeScore: PropTypes.func.isRequired,
     changeWinsPerMatch: PropTypes.func.isRequired,
     cutoff: PropTypes.number.isRequired,
+    deletePlayer: PropTypes.func.isRequired,
     groups: PropTypes.array.isRequired,
     matches: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,

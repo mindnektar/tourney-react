@@ -24,6 +24,7 @@ class App extends Component {
                     changeScore={this.props.changeScore}
                     changeWinsPerMatch={this.props.changeWinsPerMatch}
                     cutoff={this.props.data.cutoff}
+                    deletePlayer={this.props.deletePlayer}
                     groups={this.props.data.groups}
                     matches={this.props.data.matches}
                     players={this.props.data.players}
@@ -43,6 +44,7 @@ App.propTypes = {
     changeScore: PropTypes.func.isRequired,
     changeView: PropTypes.func.isRequired,
     changeWinsPerMatch: PropTypes.func.isRequired,
+    deletePlayer: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
     ui: PropTypes.object.isRequired,
 };
@@ -60,6 +62,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     changeScore: actions.changeScore,
     changeView: actions.changeView,
     changeWinsPerMatch: actions.changeWinsPerMatch,
+    deletePlayer: actions.deletePlayer,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
