@@ -134,10 +134,38 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
                     );
                 }
             });
+
+            if (cutoff % 2 !== 0) {
+                const remainingGroups = groups.slice(0);
+                let bye;
+
+                if (groups.length % 2 !== 0) {
+                    bye = Math.floor(Math.random() * groups.length);
+                    remainingGroups.splice(bye, 1);
+                }
+
+                for (let l = 0; l < remainingGroups.length / 2; l += 2) {
+                    matches[i].push(
+                        createMatch(
+                            remainingGroups[l].players.find(player => player.ranking === matchesPerGroup),
+                            remainingGroups[l + 1].players.find(player => player.ranking === matchesPerGroup),
+                            winsPerMatch[i]
+                        )
+                    );
+                }
+
+                if (bye) {
+                    matches[i].push({ bye: groups[bye].players.find(player => player.ranking === matchesPerGroup) });
+                }
+            }
         } else {
             for (let k = 0; k < matches[i - 1].length; k += 2) {
                 let winDiffA = 0;
                 let winDiffB = 0;
+
+                if (!matches[i - 1][k + 1] || matches[i - 1][k + 1].bye) {
+                    break;
+                }
 
                 matches[i - 1][k].scores[0].forEach((score, index) => {
                     if (score > matches[i - 1][k].scores[1][index]) {
@@ -162,30 +190,6 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
                         winsPerMatch[i]
                     )
                 );
-            }
-        }
-
-        if (cutoff % 2 !== 0) {
-            const remainingGroups = groups.slice(0);
-            let bye;
-
-            if (groups.length % 2 !== 0) {
-                bye = Math.floor(Math.random() * groups.length);
-                remainingGroups.splice(bye, 1);
-            }
-
-            for (let l = 0; l < remainingGroups.length / 2; l += 2) {
-                matches[i].push(
-                    createMatch(
-                        remainingGroups[l].players.find(player => player.ranking === matchesPerGroup),
-                        remainingGroups[l + 1].players.find(player => player.ranking === matchesPerGroup),
-                        winsPerMatch[i]
-                    )
-                );
-            }
-
-            if (bye) {
-                matches[i].push({ bye });
             }
         }
     }
