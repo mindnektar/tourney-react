@@ -10,26 +10,25 @@ class Round extends Component {
                     <table key={matchIndex}>
                         <tbody>
                             {match.players.map((player, playerIndex) =>
-                                player &&
-                                    <tr key={playerIndex}>
-                                        <td>{player.name}</td>
+                                <tr key={playerIndex}>
+                                    <td>{player ? player.name : ''}</td>
 
-                                        {match.scores[playerIndex].map((score, gameIndex) =>
-                                            <td
-                                                className="score"
-                                                key={gameIndex}
-                                            >
-                                                <span>
-                                                    <input
-                                                        maxLength="2"
-                                                        onChange={event => this.props.changeScore(matchIndex, playerIndex, gameIndex, event.target.value)}
-                                                        type="text"
-                                                        value={this.props.score}
-                                                    />
-                                                </span>
-                                            </td>
-                                        )}
-                                    </tr>
+                                    {match.scores[playerIndex].map((score, gameIndex) =>
+                                        <td
+                                            className="score"
+                                            key={gameIndex}
+                                        >
+                                            <span>
+                                                <input
+                                                    maxLength="2"
+                                                    onChange={event => this.props.changeScore(matchIndex, playerIndex, gameIndex, event.target.value)}
+                                                    type="text"
+                                                    value={this.props.score}
+                                                />
+                                            </span>
+                                        </td>
+                                    )}
+                                </tr>
                             )}
                         </tbody>
                     </table>

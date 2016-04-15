@@ -121,17 +121,48 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
     for (let i = 0; i < roundCount - 1; i++) {
         matches.push([]);
 
-        groups.forEach(group => {
-            for (let j = 0; j < matchesPerGroup; j++) {
+        if (i === 0) {
+            groups.forEach(group => {
+                for (let j = 0; j < matchesPerGroup; j++) {
+                    matches[i].push(
+                        createMatch(
+                            group.players.find(player => player.ranking === j),
+                            group.players.find(player => player.ranking === cutoff - 1 - j),
+                            winsPerMatch[i]
+                        )
+                    );
+                }
+            });
+        } else {
+            for (let k = 0; k < matches[i - 1].length; k += 2) {
+                let winDiffA = 0;
+                let winDiffB = 0;
+
+                matches[i - 1][k].scores[0].forEach((score, index) => {
+                    if (score > matches[i - 1][k].scores[1][index]) {
+                        winDiffA++;
+                    } else if (score < matches[i - 1][k].scores[1][index]) {
+                        winDiffA--;
+                    }
+                });
+
+                matches[i - 1][k + 1].scores[0].forEach((score, index) => {
+                    if (score > matches[i - 1][k + 1].scores[1][index]) {
+                        winDiffB++;
+                    } else if (score < matches[i - 1][k + 1].scores[1][index]) {
+                        winDiffB--;
+                    }
+                });
+
                 matches[i].push(
                     createMatch(
-                        group.players.find(player => player.ranking === j),
-                        group.players.find(player => player.ranking === cutoff - 1 - j),
+                        winDiffA ? matches[i - 1][k].players[winDiffA > 0 ? 0 : 1] : '',
+                        winDiffB ? matches[i - 1][k + 1].players[winDiffB > 0 ? 0 : 1] : '',
                         winsPerMatch[i]
                     )
                 );
             }
-        });
+        }
 
         if (cutoff % 2 !== 0) {
             const remainingGroups = groups.slice(0);
@@ -142,11 +173,11 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
                 remainingGroups.splice(bye, 1);
             }
 
-            for (let k = 0; k < remainingGroups.length / 2; k += 2) {
+            for (let l = 0; l < remainingGroups.length / 2; l += 2) {
                 matches[i].push(
                     createMatch(
-                        remainingGroups[k].players.find(player => player.ranking === matchesPerGroup),
-                        remainingGroups[k + 1].players.find(player => player.ranking === matchesPerGroup),
+                        remainingGroups[l].players.find(player => player.ranking === matchesPerGroup),
+                        remainingGroups[l + 1].players.find(player => player.ranking === matchesPerGroup),
                         winsPerMatch[i]
                     )
                 );
