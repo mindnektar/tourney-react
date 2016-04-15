@@ -245,6 +245,7 @@ export const changeGroups = groups => ({ type: CHANGE_GROUPS, payload: { groups 
 export const changePlayerName = (index, name) => ({ type: CHANGE_PLAYER_NAME, payload: { index, name } });
 export const changeWinsPerMatch = (index, wins) => ({ type: CHANGE_WINS_PER_MATCH, payload: { index, wins } });
 export const deletePlayer = index => ({ type: DELETE_PLAYER, payload: { index } });
+export const setMatches = (roundIndex, matches) => ({ type: SET_MATCHES, payload: { roundIndex, matches } });
 
 export const changeCutoff = cutoff => dispatch => {
     dispatch({ type: CHANGE_CUTOFF, payload: { cutoff } });
@@ -279,7 +280,6 @@ export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, scor
     dispatch({ type: CHANGE_SCORE, payload: { roundIndex, matchIndex, playerIndex, gameIndex, score } });
 
     if (roundIndex === 0) {
-        dispatch(setMatches(getState().data.matches[0]));
         dispatch(changeGroups(calculateGroupPositions(groups.slice(0), getState().data.matches[0])));
     }
 };
@@ -292,30 +292,24 @@ export const changeView = view => (dispatch, getState) => {
     }
 
     if (currentView === 'options') {
-        const { groups, players } = getState().data;
+        const { groups, players, cutoff, winsPerMatch } = getState().data;
         const assignedGroups = assignPlayersRandomlyToGroups(groups.slice(0), players.slice(0));
 
         dispatch(changeGroups(assignedGroups));
-        dispatch(setMatches());
 
         if (view === 'preliminaries') {
+            dispatch(
+                setMatches(
+                    null,
+                    [
+                        determinePreliminaries(assignedGroups, winsPerMatch[0]),
+                        ...determineKnockout(assignedGroups, cutoff, winsPerMatch.slice(1)),
+                    ]
+                )
+            );
             dispatch(changeGroups(calculateGroupPositions(assignedGroups.slice(0), getState().data.matches[0])));
         }
     }
 
     dispatch({ type: CHANGE_VIEW, payload: { view } });
-};
-
-export const setMatches = preliminaries => (dispatch, getState) => {
-    const { groups, winsPerMatch, cutoff } = getState().data;
-
-    dispatch({
-        type: SET_MATCHES,
-        payload: {
-            matches: [
-                preliminaries || determinePreliminaries(groups, winsPerMatch[0]),
-                ...determineKnockout(groups, cutoff, winsPerMatch.slice(1)),
-            ],
-        },
-    });
 };

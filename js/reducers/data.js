@@ -118,9 +118,19 @@ export default (state = initialState, action = {}) => {
             });
 
         case SET_MATCHES:
-            return Object.assign({}, state, {
-                matches: action.payload.matches,
-            });
+            let matches;
+
+            if (action.payload.roundIndex === null) {
+                matches = action.payload.matches;
+            } else {
+                matches = [
+                    ...state.matches.slice(0, action.payload.roundIndex),
+                    action.payload.matches,
+                    ...state.matches.slice(action.payload.roundIndex + 1),
+                ];
+            }
+
+            return Object.assign({}, state, { matches });
 
         default:
             return state;
