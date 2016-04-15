@@ -202,13 +202,22 @@ const determinePreliminaries = (groups, winsPerMatch) => {
     for (let i = 0; i < virtualPlayersPerGroup - 1; i++) {
         for (let j = 0; j < virtualPlayersPerGroup / 2; j++) {
             for (let k = 0; k < groups.length; k++) {
-                if (matcher[j] !== playersPerGroup && matcher[virtualPlayersPerGroup - 1 - j] !== playersPerGroup) {
-                    matches.push(Object.assign({ group: k }, createMatch(
-                        matcher[j],
-                        matcher[virtualPlayersPerGroup - 1 - j],
-                        winsPerMatch
-                    )));
+                const player1 = matcher[j];
+                const player2 = matcher[virtualPlayersPerGroup - 1 - j];
+
+                if (player1 === playersPerGroup || player2 === playersPerGroup) {
+                    break;
                 }
+
+                if (groups[k].players[player1].name === '---' || groups[k].players[player2].name === '---') {
+                    break;
+                }
+
+                matches.push(Object.assign({ group: k }, createMatch(
+                    matcher[j],
+                    matcher[virtualPlayersPerGroup - 1 - j],
+                    winsPerMatch
+                )));
             }
         }
 
