@@ -1,5 +1,3 @@
-import CryptoJS from 'crypto-js';
-
 export const ADD_PLAYER = 'ADD_PLAYER';
 export const CALCULATE_ROUND_COUNT = 'CALCULATE_ROUND_COUNT';
 export const CHANGE_CUTOFF = 'CHANGE_CUTOFF';
@@ -10,7 +8,6 @@ export const CHANGE_SCORE = 'CHANGE_SCORE';
 export const CHANGE_WINS_PER_MATCH = 'CHANGE_WINS_PER_MATCH';
 export const CHANGE_VIEW = 'CHANGE_VIEW';
 export const DELETE_PLAYER = 'DELETE_PLAYER';
-export const SAVE_DATA = 'SAVE_DATA';
 export const SET_DATA = 'SET_DATA';
 export const SET_MATCHES = 'SET_MATCHES';
 export const SET_UI = 'SET_UI';
@@ -318,15 +315,4 @@ export const changeView = view => (dispatch, getState) => {
     }
 
     dispatch({ type: CHANGE_VIEW, payload: { view } });
-};
-
-export const saveData = () => (dispatch, getState) => {
-    const encryptedState = encodeURIComponent(
-        CryptoJS.AES.encrypt(
-            JSON.stringify(getState()),
-            'lala'
-        )
-    );
-
-    window.history.pushState({}, '', `#${encryptedState.toString()}`);
 };

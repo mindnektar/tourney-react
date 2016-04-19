@@ -25,11 +25,6 @@ class Sidebar extends Component {
                     disabled={this.props.playerCount < 2}
                     label="Knock-out"
                 />
-
-                <ViewOption
-                    onClick={this.props.saveData}
-                    label="Save"
-                />
             </div>
         );
     }

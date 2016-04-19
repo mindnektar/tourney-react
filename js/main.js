@@ -18,6 +18,20 @@ const middleware = [
         predicate: (getState, action) => typeof action.type !== 'undefined',
     }),
     thunk,
+    store => next => action => {
+        const result = next(action);
+
+        const encryptedState = encodeURIComponent(
+            CryptoJS.AES.encrypt(
+                JSON.stringify(store.getState()),
+                'lala'
+            )
+        );
+
+        window.history.pushState({}, '', `#${encryptedState.toString()}`);
+
+        return result;
+    },
 ];
 
 const store = applyMiddleware(...middleware)(createStore)(combineReducers({ data, ui }));
