@@ -11,8 +11,8 @@ class App extends Component {
             <div>
                 <Sidebar
                     changeView={this.props.changeView}
-                    playerCount={this.props.data.players.length}
                     saveData={this.props.saveData}
+                    tourneyCreated={this.props.data.matches.length > 0}
                     tourneyStarted={this.props.ui.started}
                     view={this.props.ui.view}
                 />

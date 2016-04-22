@@ -15,14 +15,14 @@ class Sidebar extends Component {
                 <ViewOption
                     active={this.props.view === 'preliminaries'}
                     onClick={() => this.props.changeView('preliminaries')}
-                    disabled={this.props.playerCount < 2}
+                    disabled={!this.props.tourneyCreated}
                     label="Preliminaries"
                 />
 
                 <ViewOption
                     active={this.props.view === 'knockout'}
                     onClick={() => this.props.changeView('knockout')}
-                    disabled={this.props.playerCount < 2}
+                    disabled={!this.props.tourneyCreated}
                     label="Knock-out"
                 />
             </div>
@@ -32,8 +32,8 @@ class Sidebar extends Component {
 
 Sidebar.propTypes = {
     changeView: PropTypes.func.isRequired,
-    playerCount: PropTypes.number.isRequired,
     saveData: PropTypes.func.isRequired,
+    tourneyCreated: PropTypes.bool.isRequired,
     tourneyStarted: PropTypes.bool.isRequired,
     view: PropTypes.string.isRequired,
 };
