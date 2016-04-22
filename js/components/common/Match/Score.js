@@ -20,7 +20,10 @@ class Score extends Component {
 
 Score.propTypes = {
     changeScore: PropTypes.func.isRequired,
-    score: PropTypes.number,
+    score: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+    ]),
     updateMatches: PropTypes.func.isRequired,
 };
 

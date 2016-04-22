@@ -58,7 +58,7 @@ const calculateGroupPositions = (groups, matches) => {
         const gameWins = [0, 0];
 
         match.scores[0].forEach((score, scoreIndex) => {
-            if (score !== null && match.scores[1][scoreIndex] !== null) {
+            if (score !== '' && match.scores[1][scoreIndex] !== '') {
                 const scoreDiff = score - match.scores[1][scoreIndex];
 
                 if (scoreDiff > 0) {
@@ -128,7 +128,7 @@ const createMatch = (player1, player2, winsPerMatch) => ({
         new Array(2),
         () => Array.from(
             new Array(winsPerMatch * 2 - 1),
-            () => null
+            () => ''
         )
     ),
 });
@@ -334,13 +334,10 @@ export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, scor
         (roundIndex > 0 && !hasScores(matches[roundIndex - 1])) ||
         (roundIndex < matches.length - 1 && hasScores(matches[roundIndex + 1]))
     ) {
-        dispatch({ type: CHANGE_SCORE, payload: { roundIndex, matchIndex, playerIndex, gameIndex, score: '' } });
-        return;
+        score = null;
     }
 
-    if (score === '') {
-        score = null;
-    } else {
+    if (score !== null && score !== '') {
         score = parseInt(score, 10);
 
         if (isNaN(score)) {

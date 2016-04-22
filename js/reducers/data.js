@@ -80,6 +80,10 @@ export default (state = initialState, action = {}) => {
             });
 
         case CHANGE_SCORE:
+            if (action.payload.score === null) {
+                return Object.assign({}, state);
+            }
+
             return Object.assign({}, state, {
                 matches: [
                     ...state.matches.slice(0, action.payload.roundIndex),
