@@ -294,6 +294,7 @@ const determinePreliminaries = (groups, winsPerMatch) => {
 const estimateTourneyDuration = rounds => {
     let minimumMatches = 0;
     let maximumMatches = 0;
+    const minutesPerMatch = 3;
 
     rounds.forEach(round => {
         round.forEach(match => {
@@ -306,7 +307,7 @@ const estimateTourneyDuration = rounds => {
 
     const averageMatches = Math.floor((maximumMatches - minimumMatches) / 5) + minimumMatches;
 
-    return averageMatches * 3;
+    return averageMatches * minutesPerMatch;
 };
 
 const hasScores = matches => {
