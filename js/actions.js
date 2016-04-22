@@ -203,13 +203,19 @@ const determineSubsequentKnockoutRound = (previousMatches, cutoff, winsPerMatch)
 
         if (previousMatches[k].bye) {
             matches.push({ bye: previousMatches[k].bye });
-        }
 
-        if (!previousMatches[k + 1]) {
             return matches;
         }
 
-        if (previousMatches[k + 1].bye) {
+        if (!previousMatches[k + 1]) {
+            winnerA = compareScores(previousMatches[k].scores, winsPerMatch);
+
+            matches.push({ bye: winnerA !== null ? previousMatches[k].players[winnerA] : '' });
+
+            return matches;
+        }
+
+        if (typeof previousMatches[k + 1].bye !== 'undefined') {
             if (matches.length === 0) {
                 winnerA = compareScores(previousMatches[k].scores, winsPerMatch);
 
@@ -356,30 +362,24 @@ export const changeView = view => (dispatch, getState) => {
         return;
     }
 
-    if (currentView === 'options') {
-        const { groups, players, cutoff, winsPerMatch } = getState().data;
-        const assignedGroups = assignPlayersRandomlyToGroups(groups.slice(0), players.slice(0));
-
-        dispatch(changeGroups(assignedGroups));
-
-        if (view === 'preliminaries') {
-            const preliminaries = determinePreliminaries(getState().data.groups, winsPerMatch[0]);
-
-            dispatch(setMatches(0, preliminaries));
-            dispatch(changeGroups(calculateGroupPositions(assignedGroups.slice(0), getState().data.matches[0])));
-            dispatch(
-                setMatches(
-                    null,
-                    [
-                        preliminaries,
-                        ...determineKnockout(getState().data.groups, cutoff, winsPerMatch.slice(1)),
-                    ]
-                )
-            );
-        }
-    }
-
     dispatch({ type: CHANGE_VIEW, payload: { view } });
+};
+
+export const createTourney = () => (dispatch, getState) => {
+    const { groups, players, cutoff, winsPerMatch } = getState().data;
+    const assignedGroups = assignPlayersRandomlyToGroups(groups.slice(0), players.slice(0));
+    const preliminaries = determinePreliminaries(assignedGroups, winsPerMatch[0]);
+
+    dispatch(changeGroups(calculateGroupPositions(assignedGroups.slice(0), preliminaries)));
+    dispatch(
+        setMatches(
+            null,
+            [
+                preliminaries,
+                ...determineKnockout(getState().data.groups, cutoff, winsPerMatch.slice(1)),
+            ]
+        )
+    );
 };
 
 export const updateMatches = (roundIndex) => (dispatch, getState) => {

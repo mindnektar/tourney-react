@@ -5,7 +5,7 @@ class Round extends Component {
         return (
             <div className="column">
                 {this.props.matches.map((match, matchIndex) =>
-                    (!match.bye &&
+                    (typeof match.bye === 'undefined' &&
                         <table key={matchIndex}>
                             <tbody>
                                 {match.players.map((player, playerIndex) =>
@@ -35,11 +35,11 @@ class Round extends Component {
                     )
                 )}
 
-                {this.props.matches[this.props.matches.length - 1].bye &&
+                {typeof this.props.matches[this.props.matches.length - 1].bye !== 'undefined' &&
                     <table className="bye">
                         <tbody>
                             <tr>
-                                <td>{`${this.props.matches[this.props.matches.length - 1].bye.name} gets a bye`}</td>
+                                <td>{`${this.props.matches[this.props.matches.length - 1].bye.name || 'Someone'} gets a bye`}</td>
                             </tr>
                         </tbody>
                     </table>

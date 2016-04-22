@@ -24,6 +24,13 @@ class Prep extends Component {
                         winsPerMatch={this.props.winsPerMatch}
                     />
                 </div>
+
+                <div
+                    className="create-tourney"
+                    onClick={() => this.props.createTourney()}
+                >
+                    Create tourney
+                </div>
             </div>
         );
     }
@@ -35,6 +42,7 @@ Prep.propTypes = {
     changeGroupCount: PropTypes.func.isRequired,
     changePlayerName: PropTypes.func.isRequired,
     changeWinsPerMatch: PropTypes.func.isRequired,
+    createTourney: PropTypes.func.isRequired,
     cutoff: PropTypes.number.isRequired,
     deletePlayer: PropTypes.func.isRequired,
     groups: PropTypes.array.isRequired,

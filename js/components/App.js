@@ -24,6 +24,7 @@ class App extends Component {
                     changePlayerName={this.props.changePlayerName}
                     changeScore={this.props.changeScore}
                     changeWinsPerMatch={this.props.changeWinsPerMatch}
+                    createTourney={this.props.createTourney}
                     cutoff={this.props.data.cutoff}
                     deletePlayer={this.props.deletePlayer}
                     groups={this.props.data.groups}
@@ -46,6 +47,7 @@ App.propTypes = {
     changeScore: PropTypes.func.isRequired,
     changeView: PropTypes.func.isRequired,
     changeWinsPerMatch: PropTypes.func.isRequired,
+    createTourney: PropTypes.func.isRequired,
     deletePlayer: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
     saveData: PropTypes.func.isRequired,
@@ -66,6 +68,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     changeScore: actions.changeScore,
     changeView: actions.changeView,
     changeWinsPerMatch: actions.changeWinsPerMatch,
+    createTourney: actions.createTourney,
     deletePlayer: actions.deletePlayer,
     saveData: actions.saveData,
     updateMatches: actions.updateMatches,
