@@ -129,50 +129,58 @@ const createMatch = (player1, player2, winsPerMatch) => ({
     ),
 });
 
+const determineFirstKnockoutRound = (groups, cutoff, winsPerMatch) => {
+    const matchesPerGroup = Math.floor(cutoff / 2);
+    const matches = [];
+
+    groups.forEach(group => {
+        for (let j = 0; j < matchesPerGroup; j++) {
+            matches.push(
+                createMatch(
+                    group.players.find(player => player.ranking === j),
+                    group.players.find(player => player.ranking === cutoff - 1 - j),
+                    winsPerMatch
+                )
+            );
+        }
+    });
+
+    if (cutoff % 2 !== 0) {
+        const remainingGroups = groups.slice(0);
+        let bye = null;
+
+        if (groups.length % 2 !== 0) {
+            bye = Math.floor(Math.random() * groups.length);
+            remainingGroups.splice(bye, 1);
+        }
+
+        for (let l = 0; l < remainingGroups.length / 2; l += 2) {
+            matches.push(
+                createMatch(
+                    remainingGroups[l].players.find(player => player.ranking === matchesPerGroup),
+                    remainingGroups[l + 1].players.find(player => player.ranking === matchesPerGroup),
+                    winsPerMatch
+                )
+            );
+        }
+
+        if (bye !== null) {
+            matches.push({ bye: groups[bye].players.find(player => player.ranking === matchesPerGroup) });
+        }
+    }
+
+    return matches;
+};
+
 const determineKnockout = (groups, cutoff, winsPerMatch) => {
     const roundCount = Math.ceil(Math.log2(cutoff * groups.length)) + 1;
-    const matchesPerGroup = Math.floor(cutoff / 2);
     const matches = [];
 
     for (let i = 0; i < roundCount - 1; i++) {
         matches.push([]);
 
         if (i === 0) {
-            groups.forEach(group => {
-                for (let j = 0; j < matchesPerGroup; j++) {
-                    matches[i].push(
-                        createMatch(
-                            group.players.find(player => player.ranking === j),
-                            group.players.find(player => player.ranking === cutoff - 1 - j),
-                            winsPerMatch[i]
-                        )
-                    );
-                }
-            });
-
-            if (cutoff % 2 !== 0) {
-                const remainingGroups = groups.slice(0);
-                let bye = null;
-
-                if (groups.length % 2 !== 0) {
-                    bye = Math.floor(Math.random() * groups.length);
-                    remainingGroups.splice(bye, 1);
-                }
-
-                for (let l = 0; l < remainingGroups.length / 2; l += 2) {
-                    matches[i].push(
-                        createMatch(
-                            remainingGroups[l].players.find(player => player.ranking === matchesPerGroup),
-                            remainingGroups[l + 1].players.find(player => player.ranking === matchesPerGroup),
-                            winsPerMatch[i]
-                        )
-                    );
-                }
-
-                if (bye !== null) {
-                    matches[i].push({ bye: groups[bye].players.find(player => player.ranking === matchesPerGroup) });
-                }
-            }
+            matches[i] = determineFirstKnockoutRound(groups, cutoff, winsPerMatch[i]);
         } else {
             for (let k = 0; k < matches[i - 1].length; k += 2) {
                 let winDiffA = 0;
@@ -290,7 +298,7 @@ export const changeGroupCount = groupCount => (dispatch, getState) => {
 };
 
 export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, score) => (dispatch, getState) => {
-    const { groups } = getState().data;
+    const { groups, cutoff, winsPerMatch } = getState().data;
 
     if (score === '') {
         score = null;
@@ -306,6 +314,7 @@ export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, scor
 
     if (roundIndex === 0) {
         dispatch(changeGroups(calculateGroupPositions(groups.slice(0), getState().data.matches[0])));
+        dispatch(setMatches(1, determineFirstKnockoutRound(getState().data.groups, cutoff, winsPerMatch[1])));
     }
 };
 
@@ -323,16 +332,19 @@ export const changeView = view => (dispatch, getState) => {
         dispatch(changeGroups(assignedGroups));
 
         if (view === 'preliminaries') {
+            const preliminaries = determinePreliminaries(getState().data.groups, winsPerMatch[0]);
+
+            dispatch(setMatches(0, preliminaries));
+            dispatch(changeGroups(calculateGroupPositions(assignedGroups.slice(0), getState().data.matches[0])));
             dispatch(
                 setMatches(
                     null,
                     [
-                        determinePreliminaries(assignedGroups, winsPerMatch[0]),
-                        ...determineKnockout(assignedGroups, cutoff, winsPerMatch.slice(1)),
+                        preliminaries,
+                        ...determineKnockout(getState().data.groups, cutoff, winsPerMatch.slice(1)),
                     ]
                 )
             );
-            dispatch(changeGroups(calculateGroupPositions(assignedGroups.slice(0), getState().data.matches[0])));
         }
     }
 

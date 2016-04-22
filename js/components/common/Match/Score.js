@@ -7,7 +7,7 @@ class Score extends Component {
                 <span>
                     <input
                         maxLength="2"
-                        onChange={event => this.props.changeScore(event.target.value)}
+                        onBlur={event => this.props.changeScore(event.target.value)}
                         type="text"
                         value={this.props.score}
                     />
