@@ -6,10 +6,10 @@ class Score extends Component {
             <td className="score">
                 <span>
                     <input
+                        defaultValue={this.props.score}
                         maxLength="2"
                         onBlur={event => this.props.changeScore(event.target.value)}
                         type="text"
-                        value={this.props.score}
                     />
                 </span>
             </td>

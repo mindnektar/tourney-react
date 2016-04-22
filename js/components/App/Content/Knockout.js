@@ -10,7 +10,7 @@ class Knockout extends Component {
                 <div className="column-container">
                     {this.props.rounds && this.props.rounds.map((round, roundIndex) =>
                         <Round
-                            changeScore={(matchIndex, playerIndex, gameIndex, score) => this.props.changeScore(roundIndex, matchIndex, playerIndex, gameIndex, score)}
+                            changeScore={(matchIndex, playerIndex, gameIndex, score) => this.props.changeScore(roundIndex + 1, matchIndex, playerIndex, gameIndex, score)}
                             key={roundIndex}
                             matches={round}
                         />

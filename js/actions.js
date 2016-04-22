@@ -104,18 +104,22 @@ const calculateGroupPositions = (groups, matches) => {
     return groups;
 };
 
-const compareScores = (scores) => {
-    let winDiff = 0;
+const compareScores = (scores, winsPerMatch) => {
+    const gameWins = [0, 0];
 
     scores[0].forEach((score, index) => {
         if (score > scores[1][index]) {
-            winDiff++;
+            gameWins[0]++;
         } else if (score < scores[1][index]) {
-            winDiff--;
+            gameWins[1]++;
         }
     });
 
-    return winDiff;
+    if (gameWins[0] >= winsPerMatch || gameWins[1] >= winsPerMatch) {
+        return gameWins[0] > gameWins[1] ? 0 : 1;
+    }
+
+    return null;
 };
 
 const createMatch = (player1, player2, winsPerMatch) => ({
@@ -182,48 +186,56 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
         if (i === 0) {
             matches[i] = determineFirstKnockoutRound(groups, cutoff, winsPerMatch[i]);
         } else {
-            for (let k = 0; k < matches[i - 1].length; k += 2) {
-                let winDiffA = 0;
-                let winDiffB = 0;
+            matches[i] = determineSubsequentKnockoutRound(matches[i - 1], cutoff, winsPerMatch[i]);
+        }
+    }
 
-                if (matches[i - 1][k].bye) {
-                    matches[i].push({ bye: matches[i - 1][k].bye });
-                }
+    return matches;
+};
 
-                if (!matches[i - 1][k + 1]) {
-                    break;
-                }
+const determineSubsequentKnockoutRound = (previousMatches, cutoff, winsPerMatch) => {
+    const matches = [];
 
-                if (matches[i - 1][k + 1].bye) {
-                    if (matches[i].length === 0) {
-                        winDiffA = compareScores(matches[i - 1][k].scores);
+    for (let k = 0; k < previousMatches.length; k += 2) {
+        let winnerA = null;
+        let winnerB = null;
 
-                        matches[i].push(
-                            createMatch(
-                                winDiffA ? matches[i - 1][k].players[winDiffA > 0 ? 0 : 1] : '',
-                                matches[i - 1][k + 1].bye,
-                                winsPerMatch[i]
-                            )
-                        );
-                    } else {
-                        matches[i].push({ bye: matches[i - 1][k + 1].bye });
-                    }
+        if (previousMatches[k].bye) {
+            matches.push({ bye: previousMatches[k].bye });
+        }
 
-                    break;
-                }
+        if (!previousMatches[k + 1]) {
+            return matches;
+        }
 
-                winDiffA = compareScores(matches[i - 1][k].scores);
-                winDiffB = compareScores(matches[i - 1][k + 1].scores);
+        if (previousMatches[k + 1].bye) {
+            if (matches.length === 0) {
+                winnerA = compareScores(previousMatches[k].scores, winsPerMatch);
 
-                matches[i].push(
+                matches.push(
                     createMatch(
-                        winDiffA ? matches[i - 1][k].players[winDiffA > 0 ? 0 : 1] : '',
-                        winDiffB ? matches[i - 1][k + 1].players[winDiffB > 0 ? 0 : 1] : '',
-                        winsPerMatch[i]
+                        winnerA !== null ? previousMatches[k].players[winnerA] : '',
+                        previousMatches[k + 1].bye,
+                        winsPerMatch
                     )
                 );
+            } else {
+                matches.push({ bye: previousMatches[k + 1].bye });
             }
+
+            return matches;
         }
+
+        winnerA = compareScores(previousMatches[k].scores, winsPerMatch);
+        winnerB = compareScores(previousMatches[k + 1].scores, winsPerMatch);
+
+        matches.push(
+            createMatch(
+                winnerA !== null ? previousMatches[k].players[winnerA] : '',
+                winnerB !== null ? previousMatches[k + 1].players[winnerB] : '',
+                winsPerMatch
+            )
+        );
     }
 
     return matches;
@@ -315,6 +327,8 @@ export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, scor
     if (roundIndex === 0) {
         dispatch(changeGroups(calculateGroupPositions(groups.slice(0), getState().data.matches[0])));
         dispatch(setMatches(1, determineFirstKnockoutRound(getState().data.groups, cutoff, winsPerMatch[1])));
+    } else if (roundIndex < winsPerMatch.length - 1) {
+        dispatch(setMatches(roundIndex + 1, determineSubsequentKnockoutRound(getState().data.matches[roundIndex], cutoff, winsPerMatch[roundIndex + 1])));
     }
 };
 

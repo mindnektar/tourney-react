@@ -19,10 +19,10 @@ class Round extends Component {
                                             >
                                                 <span>
                                                     <input
+                                                        defaultValue={score}
                                                         maxLength="2"
-                                                        onChange={event => this.props.changeScore(matchIndex, playerIndex, gameIndex, event.target.value)}
+                                                        onBlur={event => this.props.changeScore(matchIndex, playerIndex, gameIndex, event.target.value)}
                                                         type="text"
-                                                        value={this.props.score}
                                                     />
                                                 </span>
                                             </td>
