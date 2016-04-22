@@ -11,6 +11,7 @@ export const DELETE_PLAYER = 'DELETE_PLAYER';
 export const SET_DATA = 'SET_DATA';
 export const SET_MATCHES = 'SET_MATCHES';
 export const SET_UI = 'SET_UI';
+export const START_TOURNEY = 'START_TOURNEY';
 
 const assignPlayersRandomlyToGroups = (groups, players) => {
     if (!players.length) {
@@ -177,10 +178,10 @@ const determineFirstKnockoutRound = (groups, cutoff, winsPerMatch) => {
 };
 
 const determineKnockout = (groups, cutoff, winsPerMatch) => {
-    const roundCount = Math.ceil(Math.log2(cutoff * groups.length)) + 1;
+    const roundCount = Math.ceil(Math.log2(cutoff * groups.length));
     const matches = [];
 
-    for (let i = 0; i < roundCount - 1; i++) {
+    for (let i = 0; i < roundCount; i++) {
         matches.push([]);
 
         if (i === 0) {
@@ -394,6 +395,7 @@ export const updateMatches = (roundIndex) => (dispatch, getState) => {
     if (roundIndex === 0) {
         dispatch(changeGroups(calculateGroupPositions(groups.slice(0), getState().data.matches[0])));
         dispatch(setMatches(1, determineFirstKnockoutRound(getState().data.groups, cutoff, winsPerMatch[1])));
+        dispatch({ type: START_TOURNEY });
     } else if (roundIndex < winsPerMatch.length - 1) {
         dispatch(setMatches(roundIndex + 1, determineSubsequentKnockoutRound(getState().data.matches[roundIndex], cutoff, winsPerMatch[roundIndex + 1])));
     }
