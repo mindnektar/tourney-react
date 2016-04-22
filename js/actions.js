@@ -104,6 +104,20 @@ const calculateGroupPositions = (groups, matches) => {
     return groups;
 };
 
+const compareScores = (scores) => {
+    let winDiff = 0;
+
+    scores[0].forEach((score, index) => {
+        if (score > scores[1][index]) {
+            winDiff++;
+        } else if (score < scores[1][index]) {
+            winDiff--;
+        }
+    });
+
+    return winDiff;
+};
+
 const createMatch = (player1, player2, winsPerMatch) => ({
     players: [player1, player2],
     scores: Array.from(
@@ -138,7 +152,7 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
 
             if (cutoff % 2 !== 0) {
                 const remainingGroups = groups.slice(0);
-                let bye;
+                let bye = null;
 
                 if (groups.length % 2 !== 0) {
                     bye = Math.floor(Math.random() * groups.length);
@@ -155,7 +169,7 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
                     );
                 }
 
-                if (bye) {
+                if (bye !== null) {
                     matches[i].push({ bye: groups[bye].players.find(player => player.ranking === matchesPerGroup) });
                 }
             }
@@ -164,25 +178,34 @@ const determineKnockout = (groups, cutoff, winsPerMatch) => {
                 let winDiffA = 0;
                 let winDiffB = 0;
 
-                if (!matches[i - 1][k + 1] || matches[i - 1][k + 1].bye) {
+                if (matches[i - 1][k].bye) {
+                    matches[i].push({ bye: matches[i - 1][k].bye });
+                }
+
+                if (!matches[i - 1][k + 1]) {
                     break;
                 }
 
-                matches[i - 1][k].scores[0].forEach((score, index) => {
-                    if (score > matches[i - 1][k].scores[1][index]) {
-                        winDiffA++;
-                    } else if (score < matches[i - 1][k].scores[1][index]) {
-                        winDiffA--;
-                    }
-                });
+                if (matches[i - 1][k + 1].bye) {
+                    if (matches[i].length === 0) {
+                        winDiffA = compareScores(matches[i - 1][k].scores);
 
-                matches[i - 1][k + 1].scores[0].forEach((score, index) => {
-                    if (score > matches[i - 1][k + 1].scores[1][index]) {
-                        winDiffB++;
-                    } else if (score < matches[i - 1][k + 1].scores[1][index]) {
-                        winDiffB--;
+                        matches[i].push(
+                            createMatch(
+                                winDiffA ? matches[i - 1][k].players[winDiffA > 0 ? 0 : 1] : '',
+                                matches[i - 1][k + 1].bye,
+                                winsPerMatch[i]
+                            )
+                        );
+                    } else {
+                        matches[i].push({ bye: matches[i - 1][k + 1].bye });
                     }
-                });
+
+                    break;
+                }
+
+                winDiffA = compareScores(matches[i - 1][k].scores);
+                winDiffB = compareScores(matches[i - 1][k + 1].scores);
 
                 matches[i].push(
                     createMatch(
@@ -279,7 +302,6 @@ export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, scor
         }
     }
 
-    dispatch({ type: START_TOURNEY });
     dispatch({ type: CHANGE_SCORE, payload: { roundIndex, matchIndex, playerIndex, gameIndex, score } });
 
     if (roundIndex === 0) {

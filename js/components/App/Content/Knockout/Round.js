@@ -5,32 +5,44 @@ class Round extends Component {
         return (
             <div className="column">
                 {this.props.matches.map((match, matchIndex) =>
-                    <table key={matchIndex}>
-                        <tbody>
-                            {match.players.map((player, playerIndex) =>
-                                <tr key={playerIndex}>
-                                    <td>{player ? player.name : ''}</td>
+                    (!match.bye &&
+                        <table key={matchIndex}>
+                            <tbody>
+                                {match.players.map((player, playerIndex) =>
+                                    <tr key={playerIndex}>
+                                        <td>{player ? player.name : ''}</td>
 
-                                    {match.scores[playerIndex].map((score, gameIndex) =>
-                                        <td
-                                            className="score"
-                                            key={gameIndex}
-                                        >
-                                            <span>
-                                                <input
-                                                    maxLength="2"
-                                                    onChange={event => this.props.changeScore(matchIndex, playerIndex, gameIndex, event.target.value)}
-                                                    type="text"
-                                                    value={this.props.score}
-                                                />
-                                            </span>
-                                        </td>
-                                    )}
-                                </tr>
-                            )}
+                                        {match.scores[playerIndex].map((score, gameIndex) =>
+                                            <td
+                                                className="score"
+                                                key={gameIndex}
+                                            >
+                                                <span>
+                                                    <input
+                                                        maxLength="2"
+                                                        onChange={event => this.props.changeScore(matchIndex, playerIndex, gameIndex, event.target.value)}
+                                                        type="text"
+                                                        value={this.props.score}
+                                                    />
+                                                </span>
+                                            </td>
+                                        )}
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    )
+                )}
+
+                {this.props.matches[this.props.matches.length - 1].bye &&
+                    <table className="bye">
+                        <tbody>
+                            <tr>
+                                <td>{`${this.props.matches[this.props.matches.length - 1].bye.name} gets a bye`}</td>
+                            </tr>
                         </tbody>
                     </table>
-                )}
+                }
             </div>
         );
     }
