@@ -1,3 +1,8 @@
+@import "partials/content"
+@import "partials/matches"
+@import "partials/options"
+@import "partials/sidebar"
+
 html
     height: 100%
     position: relative
@@ -9,82 +14,10 @@ body
     margin: 0
     position: relative
 
-img
-    display: block
-    height: 50px
-    margin: 20px auto
-
 h1,
 h2
     margin-top: 0
     text-align: center
-
-.sidebar
-    box-sizing: border-box
-    display: flex
-    flex-direction: column
-    float: left
-    height: 100%
-    justify-content: center
-    padding: 10px
-    position: absolute
-    width: 100px
-
-.view-option
-    border: 2px solid black
-    border-radius: 8px
-    box-sizing: border-box
-    cursor: pointer
-    font-size: .7em
-    height: 80px
-    line-height: 76px
-    margin: 5px 0
-    text-align: center
-
-    &.active
-        background: rgba(0, 0, 0, .2)
-
-    &.disabled
-        border-color: #aaa
-        color: #aaa
-        cursor: default
-
-.content
-    float: left
-    height: 100%
-    left: 100px
-    position: absolute
-    right: 0
-
-.column-container
-    bottom: 0
-    display: flex
-    flex-direction: row
-    height: 100%
-    justify-content: center
-
-.column
-    box-sizing: border-box
-    flex-basis: 0
-    flex-grow: 1
-    max-height: 100%
-    overflow-y: auto
-    padding: 20px
-    position: relative
-
-.knockout
-    box-sizing: border-box
-    height: 100%
-    padding: 20px 0
-
-    .column-container
-        height: calc(100% - 48px)
-
-        .column
-            display: flex
-            flex-direction: column
-            height: 100%
-            justify-content: space-around
 
 input
     background: none
@@ -96,137 +29,3 @@ input
     padding: 0
     text-align: center
     width: 100%
-
-table
-    background: rgba(0,0,0,.5)
-    border: 4px solid black
-    border-radius: 8px
-    border-spacing: 0
-    color: white
-    margin-bottom: 20px
-    text-align: center
-    width: 100%
-
-    &.bye
-        border-width: 1px
-        bottom: 0
-        left: 20px
-        position: absolute
-        width: calc(100% - 40px)
-
-th,
-td
-    border: 1px solid black
-    border-left: none
-    border-top: none
-    max-width: 0
-    overflow-x: hidden
-    padding: 4px
-    text-overflow: ellipsis
-    white-space: nowrap
-
-tr:last-child td
-    border-bottom: none
-
-td:last-child,
-th:last-child
-    border-right: none
-
-th
-    background: rgba(0,0,0,.2)
-
-    &.wins,
-    &.score-diff
-        width: 70px
-
-.vs
-    background: rgba(0,0,0,.2)
-    width: 20px
-
-.score
-    overflow: hidden
-    padding-left: 0
-    padding-right: 0
-    white-space: nowrap
-    width: 30px
-
-.score span
-    border-right: 1px solid #444
-    display: inline-block
-    width: 20px
-
-.score span:last-child
-    border: none
-
-.player
-    background: rgba(0,0,0,.5)
-    border: 1px solid black
-    border-left-width: 4px
-    border-top: none
-    border-right-width: 4px
-    color: white
-    padding: 4px
-    position: relative
-
-    &:first-child
-        border-top: 4px solid black
-        border-top-left-radius: 8px
-        border-top-right-radius: 8px
-
-    &:last-child
-        border-bottom: 4px solid black
-        border-bottom-left-radius: 8px
-        border-bottom-right-radius: 8px
-
-    &.add
-        cursor: pointer
-        font-weight: bold
-        text-align: center
-
-    &:hover
-        .player-delete
-            display: block
-
-.player-delete
-    color: white
-    cursor: pointer
-    display: none
-    line-height: 24px
-    position: absolute
-    right: 0
-    text-align: center
-    top: 0
-    width: 20px
-
-.option-key
-    margin-bottom: 6px
-
-.option-value
-    input
-        background: white
-        border: 1px solid black
-        border-radius: 8px
-        box-sizing: border-box
-        color: black
-        display: inline-block
-        margin-bottom: 16px
-        margin-left: 20%
-        padding: 4px
-        width: 80%
-
-.create-tourney
-    background: rgba(0, 0, 0, .2)
-    border: 2px solid black
-    border-radius: 8px
-    box-sizing: border-box
-    cursor: pointer
-    font-size: 1em
-    margin: 0 auto
-    padding: 12px 20px
-    text-align: center
-    width: 200px
-
-.duration
-    font-size: 1.5em
-    margin-top: 36px
-    text-align: center

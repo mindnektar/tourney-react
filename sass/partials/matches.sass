@@ -1,0 +1,60 @@
+table
+    background: rgba(0,0,0,.5)
+    border: 4px solid black
+    border-radius: 8px
+    border-spacing: 0
+    color: white
+    margin-bottom: 20px
+    text-align: center
+    width: 100%
+
+    &.bye
+        border-width: 1px
+        bottom: 0
+        left: 20px
+        position: absolute
+        width: calc(100% - 40px)
+
+th,
+td
+    border: 1px solid black
+    border-left: none
+    border-top: none
+    max-width: 0
+    overflow-x: hidden
+    padding: 4px
+    text-overflow: ellipsis
+    white-space: nowrap
+
+tr:last-child td
+    border-bottom: none
+
+td:last-child,
+th:last-child
+    border-right: none
+
+th
+    background: rgba(0,0,0,.2)
+
+    &.wins,
+    &.score-diff
+        width: 70px
+
+.vs
+    background: rgba(0,0,0,.2)
+    width: 20px
+
+.score
+    overflow: hidden
+    padding-left: 0
+    padding-right: 0
+    white-space: nowrap
+    width: 30px
+
+.score span
+    border-right: 1px solid #444
+    display: inline-block
+    width: 20px
+
+.score span:last-child
+    border: none
