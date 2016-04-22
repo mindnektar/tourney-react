@@ -283,6 +283,24 @@ const determinePreliminaries = (groups, winsPerMatch) => {
     return matches;
 };
 
+const hasScores = matches => {
+    let hasScore = false;
+
+    matches.forEach(match => {
+        if (match.scores) {
+            match.scores.forEach(player => {
+                player.forEach(score => {
+                    if (score) {
+                        hasScore = true;
+                    }
+                });
+            });
+        }
+    });
+
+    return hasScore;
+};
+
 export const addPlayer = () => ({ type: ADD_PLAYER });
 export const calculateRoundCount = () => ({ type: CALCULATE_ROUND_COUNT });
 export const changeGroups = groups => ({ type: CHANGE_GROUPS, payload: { groups } });
@@ -310,7 +328,15 @@ export const changeGroupCount = groupCount => (dispatch, getState) => {
 };
 
 export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, score) => (dispatch, getState) => {
-    const { groups, cutoff, winsPerMatch } = getState().data;
+    const { matches } = getState().data;
+
+    if (
+        (roundIndex > 0 && !hasScores(matches[roundIndex - 1])) ||
+        (roundIndex < matches.length - 1 && hasScores(matches[roundIndex + 1]))
+    ) {
+        dispatch({ type: CHANGE_SCORE, payload: { roundIndex, matchIndex, playerIndex, gameIndex, score: '' } });
+        return;
+    }
 
     if (score === '') {
         score = null;
@@ -318,18 +344,11 @@ export const changeScore = (roundIndex, matchIndex, playerIndex, gameIndex, scor
         score = parseInt(score, 10);
 
         if (isNaN(score)) {
-            score = getState().data.matches[roundIndex][matchIndex].scores[playerIndex][gameIndex] || 0;
+            score = matches[roundIndex][matchIndex].scores[playerIndex][gameIndex] || 0;
         }
     }
 
     dispatch({ type: CHANGE_SCORE, payload: { roundIndex, matchIndex, playerIndex, gameIndex, score } });
-
-    if (roundIndex === 0) {
-        dispatch(changeGroups(calculateGroupPositions(groups.slice(0), getState().data.matches[0])));
-        dispatch(setMatches(1, determineFirstKnockoutRound(getState().data.groups, cutoff, winsPerMatch[1])));
-    } else if (roundIndex < winsPerMatch.length - 1) {
-        dispatch(setMatches(roundIndex + 1, determineSubsequentKnockoutRound(getState().data.matches[roundIndex], cutoff, winsPerMatch[roundIndex + 1])));
-    }
 };
 
 export const changeView = view => (dispatch, getState) => {
@@ -363,4 +382,22 @@ export const changeView = view => (dispatch, getState) => {
     }
 
     dispatch({ type: CHANGE_VIEW, payload: { view } });
+};
+
+export const updateMatches = (roundIndex) => (dispatch, getState) => {
+    const { matches, groups, cutoff, winsPerMatch } = getState().data;
+
+    if (
+        (roundIndex > 0 && !hasScores(matches[roundIndex - 1])) ||
+        (roundIndex < matches.length - 1 && hasScores(matches[roundIndex + 1]))
+    ) {
+        return;
+    }
+
+    if (roundIndex === 0) {
+        dispatch(changeGroups(calculateGroupPositions(groups.slice(0), getState().data.matches[0])));
+        dispatch(setMatches(1, determineFirstKnockoutRound(getState().data.groups, cutoff, winsPerMatch[1])));
+    } else if (roundIndex < winsPerMatch.length - 1) {
+        dispatch(setMatches(roundIndex + 1, determineSubsequentKnockoutRound(getState().data.matches[roundIndex], cutoff, winsPerMatch[roundIndex + 1])));
+    }
 };

@@ -28,6 +28,7 @@ class Content extends Component {
                         groups={this.props.groups}
                         players={this.props.players}
                         matches={this.props.matches[0]}
+                        updateMatches={this.props.updateMatches}
                     />
                 }
 
@@ -35,6 +36,7 @@ class Content extends Component {
                     <Knockout
                         changeScore={this.props.changeScore}
                         rounds={this.props.matches.slice(1)}
+                        updateMatches={this.props.updateMatches}
                     />
                 }
             </div>
@@ -54,6 +56,7 @@ Content.propTypes = {
     groups: PropTypes.array.isRequired,
     matches: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
+    updateMatches: PropTypes.func.isRequired,
     view: PropTypes.string.isRequired,
     winsPerMatch: PropTypes.array.isRequired,
 };

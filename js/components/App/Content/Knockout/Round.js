@@ -19,10 +19,11 @@ class Round extends Component {
                                             >
                                                 <span>
                                                     <input
-                                                        defaultValue={score}
                                                         maxLength="2"
-                                                        onBlur={event => this.props.changeScore(matchIndex, playerIndex, gameIndex, event.target.value)}
+                                                        onBlur={() => this.props.updateMatches()}
+                                                        onChange={event => this.props.changeScore(matchIndex, playerIndex, gameIndex, event.target.value)}
                                                         type="text"
+                                                        value={score}
                                                     />
                                                 </span>
                                             </td>
@@ -51,6 +52,7 @@ class Round extends Component {
 Round.propTypes = {
     changeScore: PropTypes.func.isRequired,
     matches: PropTypes.array.isRequired,
+    updateMatches: PropTypes.func.isRequired,
 };
 
 export default Round;

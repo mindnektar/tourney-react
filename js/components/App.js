@@ -29,6 +29,7 @@ class App extends Component {
                     groups={this.props.data.groups}
                     matches={this.props.data.matches}
                     players={this.props.data.players}
+                    updateMatches={this.props.updateMatches}
                     view={this.props.ui.view}
                     winsPerMatch={this.props.data.winsPerMatch}
                 />
@@ -49,6 +50,7 @@ App.propTypes = {
     data: PropTypes.object.isRequired,
     saveData: PropTypes.func.isRequired,
     ui: PropTypes.object.isRequired,
+    updateMatches: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -66,6 +68,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     changeWinsPerMatch: actions.changeWinsPerMatch,
     deletePlayer: actions.deletePlayer,
     saveData: actions.saveData,
+    updateMatches: actions.updateMatches,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

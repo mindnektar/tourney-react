@@ -13,6 +13,7 @@ class Knockout extends Component {
                             changeScore={(matchIndex, playerIndex, gameIndex, score) => this.props.changeScore(roundIndex + 1, matchIndex, playerIndex, gameIndex, score)}
                             key={roundIndex}
                             matches={round}
+                            updateMatches={() => this.props.updateMatches(roundIndex + 1)}
                         />
                     )}
                 </div>
@@ -24,6 +25,7 @@ class Knockout extends Component {
 Knockout.propTypes = {
     changeScore: PropTypes.func.isRequired,
     rounds: PropTypes.array.isRequired,
+    updateMatches: PropTypes.func.isRequired,
 };
 
 export default Knockout;

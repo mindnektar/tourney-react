@@ -6,10 +6,11 @@ class Score extends Component {
             <td className="score">
                 <span>
                     <input
-                        defaultValue={this.props.score}
                         maxLength="2"
-                        onBlur={event => this.props.changeScore(event.target.value)}
+                        onBlur={() => this.props.updateMatches()}
+                        onChange={event => this.props.changeScore(event.target.value)}
                         type="text"
+                        value={this.props.score}
                     />
                 </span>
             </td>
@@ -20,6 +21,7 @@ class Score extends Component {
 Score.propTypes = {
     changeScore: PropTypes.func.isRequired,
     score: PropTypes.number,
+    updateMatches: PropTypes.func.isRequired,
 };
 
 export default Score;

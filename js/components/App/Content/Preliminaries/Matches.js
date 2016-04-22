@@ -16,6 +16,7 @@ class Matches extends Component {
                                 player1={this.props.groups[match.group].players[match.players[0]]}
                                 player2={this.props.groups[match.group].players[match.players[1]]}
                                 scores={match.scores}
+                                updateMatches={() => this.props.updateMatches(0)}
                             />
                         )}
                     </tbody>
@@ -29,6 +30,7 @@ Matches.propTypes = {
     changeScore: PropTypes.func.isRequired,
     groups: PropTypes.array.isRequired,
     matches: PropTypes.array.isRequired,
+    updateMatches: PropTypes.func.isRequired,
 };
 
 export default Matches;

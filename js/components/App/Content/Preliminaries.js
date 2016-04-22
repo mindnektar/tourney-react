@@ -15,6 +15,7 @@ class Tourney extends Component {
                     changeScore={this.props.changeScore}
                     groups={this.props.groups}
                     matches={this.props.matches}
+                    updateMatches={this.props.updateMatches}
                 />
             </div>
         );
@@ -26,6 +27,7 @@ Tourney.propTypes = {
     groups: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
     matches: PropTypes.array.isRequired,
+    updateMatches: PropTypes.func.isRequired,
 };
 
 export default Tourney;

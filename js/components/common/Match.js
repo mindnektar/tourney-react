@@ -14,6 +14,7 @@ class Match extends Component {
                         changeScore={score => this.props.changeScore(0, key, score)}
                         key={key}
                         score={this.props.scores[0][key]}
+                        updateMatches={this.props.updateMatches}
                     />
                 )}
 
@@ -24,6 +25,7 @@ class Match extends Component {
                         changeScore={score => this.props.changeScore(1, key, score)}
                         key={key}
                         score={this.props.scores[1][key]}
+                        updateMatches={this.props.updateMatches}
                     />
                 )}
 
@@ -38,6 +40,7 @@ Match.propTypes = {
     player1: PropTypes.object.isRequired,
     player2: PropTypes.object.isRequired,
     scores: PropTypes.array.isRequired,
+    updateMatches: PropTypes.func.isRequired,
 };
 
 export default Match;
