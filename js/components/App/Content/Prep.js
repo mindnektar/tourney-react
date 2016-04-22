@@ -3,6 +3,21 @@ import EditOptions from './Prep/EditOptions';
 import EditPlayers from './Prep/EditPlayers';
 
 class Prep extends Component {
+    formattedDuration() {
+        let hours = `${Math.floor(this.props.duration / 60)}`;
+        let minutes = `${this.props.duration % 60}`;
+
+        if (hours.length === 1) {
+            hours = `0${hours}`;
+        }
+
+        if (minutes.length === 1) {
+            minutes = `0${minutes}`;
+        }
+
+        return `${hours}:${minutes}`;
+    }
+
     render() {
         return (
             <div className="prep">
@@ -31,6 +46,12 @@ class Prep extends Component {
                 >
                     Create tourney
                 </div>
+
+                {this.props.duration &&
+                    <div className="duration">
+                        {`Estimated duration: ${this.formattedDuration()}`}
+                    </div>
+                }
             </div>
         );
     }
@@ -45,6 +66,7 @@ Prep.propTypes = {
     createTourney: PropTypes.func.isRequired,
     cutoff: PropTypes.number.isRequired,
     deletePlayer: PropTypes.func.isRequired,
+    duration: PropTypes.number,
     groups: PropTypes.array.isRequired,
     players: PropTypes.array.isRequired,
     winsPerMatch: PropTypes.array.isRequired,

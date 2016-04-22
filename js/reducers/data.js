@@ -10,10 +10,12 @@ import {
     DELETE_PLAYER,
     SET_MATCHES,
     SET_DATA,
+    SET_TOURNEY_DURATION,
 } from '../actions';
 
 const initialState = {
     cutoff: 1,
+    duration: null,
     players: [],
     groups: [{ players: [] }],
     matches: [],
@@ -138,6 +140,9 @@ export default (state = initialState, action = {}) => {
 
         case SET_DATA:
             return action.payload.data;
+
+        case SET_TOURNEY_DURATION:
+            return Object.assign({}, state, { duration: action.payload.duration });
 
         default:
             return state;

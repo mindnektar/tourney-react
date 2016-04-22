@@ -10,6 +10,7 @@ export const CHANGE_VIEW = 'CHANGE_VIEW';
 export const DELETE_PLAYER = 'DELETE_PLAYER';
 export const SET_DATA = 'SET_DATA';
 export const SET_MATCHES = 'SET_MATCHES';
+export const SET_TOURNEY_DURATION = 'SET_TOURNEY_DURATION';
 export const SET_UI = 'SET_UI';
 export const START_TOURNEY = 'START_TOURNEY';
 
@@ -290,6 +291,24 @@ const determinePreliminaries = (groups, winsPerMatch) => {
     return matches;
 };
 
+const estimateTourneyDuration = rounds => {
+    let minimumMatches = 0;
+    let maximumMatches = 0;
+
+    rounds.forEach(round => {
+        round.forEach(match => {
+            if (match.scores) {
+                minimumMatches += Math.ceil(match.scores[0].length / 2);
+                maximumMatches += match.scores[0].length;
+            }
+        });
+    });
+
+    const averageMatches = Math.floor((maximumMatches - minimumMatches) / 5) + minimumMatches;
+
+    return averageMatches * 3;
+};
+
 const hasScores = matches => {
     let hasScore = false;
 
@@ -317,6 +336,7 @@ export const deletePlayer = index => ({ type: DELETE_PLAYER, payload: { index } 
 export const setData = data => ({ type: SET_DATA, payload: { data } });
 export const setMatches = (roundIndex, matches) => ({ type: SET_MATCHES, payload: { roundIndex, matches } });
 export const setUi = ui => ({ type: SET_UI, payload: { ui } });
+export const setTourneyDuration = duration => ({ type: SET_TOURNEY_DURATION, payload: { duration } });
 
 export const changeCutoff = cutoff => dispatch => {
     dispatch({ type: CHANGE_CUTOFF, payload: { cutoff } });
@@ -369,17 +389,14 @@ export const createTourney = () => (dispatch, getState) => {
     const { groups, players, cutoff, winsPerMatch } = getState().data;
     const assignedGroups = assignPlayersRandomlyToGroups(groups.slice(0), players.slice(0));
     const preliminaries = determinePreliminaries(assignedGroups, winsPerMatch[0]);
+    const matches = [
+        preliminaries,
+        ...determineKnockout(getState().data.groups, cutoff, winsPerMatch.slice(1)),
+    ];
 
     dispatch(changeGroups(calculateGroupPositions(assignedGroups.slice(0), preliminaries)));
-    dispatch(
-        setMatches(
-            null,
-            [
-                preliminaries,
-                ...determineKnockout(getState().data.groups, cutoff, winsPerMatch.slice(1)),
-            ]
-        )
-    );
+    dispatch(setMatches(null, matches));
+    dispatch(setTourneyDuration(estimateTourneyDuration(matches)));
 };
 
 export const updateMatches = (roundIndex) => (dispatch, getState) => {

@@ -27,6 +27,7 @@ class App extends Component {
                     createTourney={this.props.createTourney}
                     cutoff={this.props.data.cutoff}
                     deletePlayer={this.props.deletePlayer}
+                    duration={this.props.data.duration}
                     groups={this.props.data.groups}
                     matches={this.props.data.matches}
                     players={this.props.data.players}
