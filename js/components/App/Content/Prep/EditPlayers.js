@@ -11,7 +11,7 @@ class EditPlayers extends Component {
 
     render() {
         return (
-            <div className="column">
+            <div className="column column-add-player">
                 <h2>Players</h2>
 
                 <div className="players">

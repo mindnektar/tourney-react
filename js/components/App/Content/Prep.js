@@ -40,18 +40,19 @@ class Prep extends Component {
                     />
                 </div>
 
-                <div
-                    className="create-tourney"
-                    onClick={() => this.props.createTourney()}
-                >
-                    Create tourney
-                </div>
-
-                {this.props.duration &&
-                    <div className="duration">
-                        {`Estimated duration: ${this.formattedDuration()}`}
+                <div className="create-tourney-wrapper">
+                    <div
+                        className="create-tourney"
+                        onClick={() => this.props.createTourney()}
+                    >
+                        Create tourney
                     </div>
-                }
+                    {this.props.duration &&
+                        <div className="duration">
+                            {`Estimated duration: ${this.formattedDuration()}`}
+                        </div>
+                    }
+                </div>
             </div>
         );
     }
