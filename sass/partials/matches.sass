@@ -1,12 +1,14 @@
 table
     background: #363945
-    border: 2px solid black
+    //border: 1px solid white
     border-radius: 8px
     border-spacing: 0
     color: white
-    margin-bottom: 20px
+    margin-bottom: 40px
     text-align: center
     width: 100%
+    overflow: hidden
+    box-shadow: 1px 2px 12px rgba(black, .3)
 
     &.bye
         border-width: 1px
@@ -18,9 +20,12 @@ table
 tr
     height: 40px
 
+    &:nth-child(even)
+        background: rgba(darken(#363945, 10%), .35)
+
 th,
 td
-    border: 1px solid black
+    border: 1px solid rgba(black, .4)
     border-left: none
     border-top: none
     max-width: 0
@@ -37,7 +42,7 @@ th:last-child
     border-right: none
 
 th
-    background: rgba(0,0,0,.2)
+    background: rgba(#00a5df, .9)
 
     &.wins,
     &.score-diff
