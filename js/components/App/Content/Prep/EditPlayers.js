@@ -11,7 +11,7 @@ class EditPlayers extends Component {
 
     render() {
         return (
-            <div className="column">
+            <div className="column column-add-player">
                 <h2>Players</h2>
 
                 <div className="players">
@@ -32,14 +32,15 @@ class EditPlayers extends Component {
                             />
                         </div>
                     )}
-
-                    <div
-                        className="player add"
-                        onClick={this.props.addPlayer}
-                    >
-                        +
-                    </div>
                 </div>
+
+                <div
+                    className="player add"
+                    onClick={this.props.addPlayer}
+                >
+                    <span>Add Player</span><button>+</button>
+                </div>
+
             </div>
         );
     }

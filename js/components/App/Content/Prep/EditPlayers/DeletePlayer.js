@@ -7,7 +7,7 @@ class PlayerInput extends Component {
                 className="player-delete"
                 onClick={this.props.deletePlayer}
             >
-                x
+                <button className="player-delete-btn">+</button>
             </div>
         );
     }
